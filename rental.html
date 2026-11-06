@@ -1,0 +1,301 @@
+
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>貸切レンタルスペース | 北習志野てわたし図書館</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="24時間365日レンタル可能。キッチン・大型冷蔵庫/冷凍庫・オーブンレンジ・ピアノ・机・椅子など完備。ワークショップ/料理教室/演奏会/会議/ヨガ/パーティー/撮影会/作業スペース/映画鑑賞など幅広くご利用いただけます。">
+</head>
+<body>
+  <div class="tewatashi-site">
+    <!-- ヘッダー（indexと同トーン） -->
+    <header class="top-header">
+      <div id="logo" class="top-logo-container"><a href="index.html">
+        <img src="./assets/images/logo-header.png" alt="ロゴ" class="top-logo-image" />
+      </a></div>
+      <nav class="top-menu" id="desktop-menu">
+        <a class="top-menu-item" href="index.html#about">ご紹介</a>
+        <a class="top-menu-item" href="index.html#video">紹介動画</a>
+        <a class="top-menu-item" href="index.html#message">3つのお約束</a>
+        <a class="top-menu-item" href="index.html#calendar">カレンダー</a>
+        <a class="top-menu-item" href="index.html#access">アクセス</a>
+        <a class="top-menu-item" href="index.html#latest">最新情報</a>
+      </nav>
+      <button id="mobile-toggle" class="top-mobile-menu-toggle" aria-label="open menu">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+      
+    </header>
+
+    <!-- モバイルメニュー -->
+    <div id="mobile-overlay" class="mobile-menu-overlay hidden">
+      <div id="mobile-backdrop" class="mobile-menu-backdrop"></div>
+      <div id="mobile-content" class="mobile-menu-content hidden">
+        <a class="mobile-menu-item" href="index.html#about">ご紹介</a>
+        <a class="mobile-menu-item" href="index.html#video">紹介動画</a>
+        <a class="mobile-menu-item" href="index.html#message">3つのお約束</a>
+        <a class="mobile-menu-item" href="index.html#calendar">カレンダー</a>
+        <a class="mobile-menu-item" href="index.html#access">アクセス</a>
+        <a class="mobile-menu-item" href="index.html#latest">最新情報</a>
+      </div>
+    </div>
+
+    <!-- ヒーロー -->
+    <section class="rental-hero">
+      <div class="rental-hero-content">
+        <h1 class="rental-hero-title">レンタルスペース</h1>
+        <p class="rental-hero-subtitle">
+          北習志野てわたし図書館の空間を、イベントや集まり、制作に。<br>
+          <b>24時間・365日ご利用可能</b>。図書館開放時は半面貸しでご案内します。
+        </p>
+        <div class="rental-hero-features">
+          <div class="rental-hero-feature">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            24時間365日利用可能
+          </div>
+          <div class="rental-hero-feature">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            どなたでも利用OK
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 料金 -->
+    <section class="rental-section rental-pricing">
+      <h2 class="rental-section-title">料金プラン</h2>
+      <!-- <div class="section-divider divider-green"></div> -->
+      <div class="rental-pricing-cards">
+        <div class="rental-pricing-card">
+          <div class="rental-pricing-label">通常プラン</div>
+          <div class="rental-pricing-price">¥3,000<span style="font-size: 1.5rem;">〜</span></div>
+          <div class="rental-pricing-unit">1時間あたり</div>
+          <div class="rental-pricing-note">全スペースをご利用いただけます</div>
+        </div>
+
+        <div class="rental-pricing-card">
+          <div class="rental-pricing-label">図書館開放時</div>
+          <div class="rental-pricing-price">¥1,500<span style="font-size: 1.5rem;">〜</span></div>
+          <div class="rental-pricing-unit">1時間あたり</div>
+          <div class="rental-pricing-note">半分のスペースの貸出となります</div>
+        </div>
+      </div>
+
+      <div class="rental-pricing-notice">
+        ※ プレ期間料金のため、変更する場合があります。<br>
+        ご予約時に最新の料金をご確認ください。
+      </div>
+    </section>
+
+    <!-- 設備 -->
+    <section class="section">
+      <div class="section-container" style="max-width:72rem">
+        <div class="section-header">
+          <h2 class="section-title">設備・備品</h2>
+          <div class="section-divider divider-green"></div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-items usecase-items">
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">キッチン</p>
+                <p class="info-item-value">大型冷蔵庫/冷凍庫・オーブンレンジ完備</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6h6v13M8 19h8"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">ピアノ・スピーカー</p>
+                <p class="info-item-value">小規模演奏会やBGMに最適</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">家具</p>
+                <p class="info-item-value">机（4人掛け8台）・椅子（50脚）・ベンチチェア（2台）</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="calendar-notice-text" style="margin-top:0.75rem">※ 備品の数は変動する場合があります。詳しくはご予約時にお尋ねください。</p>
+      </div>
+    </section>
+
+    <!-- 利用シーン -->
+    <section class="section">
+      <div class="section-container" style="max-width:72rem">
+        <div class="section-header">
+          <h2 class="section-title">こんな使い方ができます</h2>
+          <div class="section-divider divider-green"></div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-items usecase-items">
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">ワークショップ</p>
+                <p class="info-item-value">手作り体験や学習会に</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v-1m0 10v-1m5-4h1M6 12H5m10.364 4.95l.707.707M7.636 7.05l-.707-.707m9.435 0l.707-.707M7.636 16.95l-.707.707M12 6a6 6 0 100 12 6 6 0 000-12z"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">お料理教室</p>
+                <p class="info-item-value">充実のキッチン設備で</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6h6v13M8 19h8"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">演奏会</p>
+                <p class="info-item-value">ピアノを使った発表会に</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">会議</p>
+                <p class="info-item-value">落ち着いた空間で打合せ</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">ヨガ</p>
+                <p class="info-item-value">広々としたスペースで</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M5 7v10a2 2 0 002 2h10a2 2 0 002-2V7"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">歓送迎会・パーティー</p>
+                <p class="info-item-value">仲間と集まるイベントに</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">撮影会</p>
+                <p class="info-item-value">おしゃれな空間で撮影</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-8 4h10M7 8h10"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">作業スペース</p>
+                <p class="info-item-value">集中して作業したい時に</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h8a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2z"/>
+              </svg>
+              <div class="info-item-content">
+                <p class="info-item-label">映画鑑賞・ゲーム大会</p>
+                <p class="info-item-value">プロジェクターで大画面</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 予約方法 -->
+    <section class="section">
+      <div class="section-container" style="max-width:56rem">
+        <div class="section-header">
+          <h2 class="section-title">ご予約・お問い合わせ</h2>
+          <div class="section-divider divider-red"></div>
+        </div>
+        <p class="about-description" style="text-align:center">
+          ご予約は<b>InstagramのDM</b>から承っています。ご希望日時・人数・用途をお送りください。<br>
+          日程の空き状況や詳細を折り返しご連絡します。
+        </p>
+        <div class="instagram-button">
+          <a href="https://www.instagram.com/kitanarashino.tewatashi.lib"
+             target="_blank" rel="noopener noreferrer" class="btn-instagram">Instagramへ</a>
+        </div>
+        <p class="calendar-notice-text" style="text-align:center;margin-top:0.5rem">
+        </p>
+      </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <svg class="footer-logo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="footer-logo-text">北習志野てわたし図書館</span>
+        </div>
+        <p class="footer-copyright">© 2025 北習志野てわたし図書館</p>
+      </div>
+    </footer>
+  </div>
+
+  <div id="ig-popup" class="instagram-popup hidden" role="button" tabindex="0">
+    <div id="ig-close" class="instagram-close" aria-label="close">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </div>
+    <svg class="instagram-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-width="2"/>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"/>
+    </svg>
+    <span class="instagram-text">Instagramはこちら</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
