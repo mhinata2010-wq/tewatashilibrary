@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>北習志野てわたし図書館</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="tewatashi-site">
+    <!-- トップページ -->
+    <div id="top-page" class="top-page slide-0">
+      <!-- ヘッダー -->
+      <header class="top-header">
+        <div id="logo" class="top-logo-container">
+          <!-- <div class="top-logo-placeholder">ロゴ画像</div> -->
+          <img src="./assets/images/logo-header.png" alt="ロゴ" class="top-logo-image" />
+        </div>
+
+        <nav class="top-menu" id="desktop-menu">
+          <!-- メニューは data-id でセクション紐付け -->
+          <button class="top-menu-item" data-id="about">ご紹介</button>
+          <button class="top-menu-item" data-id="video">紹介動画</button>
+          <button class="top-menu-item" data-id="message">3つのお約束</button>
+          <button class="top-menu-item" data-id="calendar">カレンダー</button>
+          <button class="top-menu-item" data-id="access">アクセス</button>
+          <button class="top-menu-item" data-id="latest">最新情報</button>
+        </nav>
+
+        <button id="mobile-toggle" class="top-mobile-menu-toggle" aria-label="open menu">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </header>
+
+      <!-- モバイルメニュー -->
+      <div id="mobile-overlay" class="mobile-menu-overlay hidden">
+        <div id="mobile-backdrop" class="mobile-menu-backdrop"></div>
+        <div id="mobile-content" class="mobile-menu-content hidden">
+          <button class="mobile-menu-item" data-id="about">ご紹介</button>
+          <button class="mobile-menu-item" data-id="video">紹介動画</button>
+          <button class="mobile-menu-item" data-id="message">3つのお約束</button>
+          <button class="mobile-menu-item" data-id="calendar">カレンダー</button>
+          <button class="mobile-menu-item" data-id="access">アクセス</button>
+          <button class="mobile-menu-item" data-id="latest">最新情報</button>
+        </div>
+      </div>
+
+      <!-- メイン -->
+      <main class="top-main-content">
+        <div class="top-content-center">
+          <div class="top-main-logo">
+            <!-- <div class="top-main-logo-placeholder">メインロゴ</div> -->
+            <img src="./assets/images/top-main-logo.png" alt="メインロゴ" class="top-main-logo-image" />
+          </div>
+          <div class="top-cta-buttons" role="group" aria-label="メインアクション">
+            <div class="top-cta-item">
+              <a href="rental.html" class="top-cta top-cta--outline">レンタルスペース</a>
+              <p class="top-cta-caption">24時間365日利用可能</p>
+            </div>
+            <div class="top-cta-item">
+              <a href="#calendar" class="top-cta top-cta--outline">図書館スペース</a>
+              <p class="top-cta-caption">火曜金曜 11:00–17:00</p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Instagramポップアップ -->
+      <div id="ig-popup" class="instagram-popup hidden" role="button" tabindex="0">
+        <div id="ig-close" class="instagram-close" aria-label="close">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+        <svg class="instagram-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-width="2"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"/>
+        </svg>
+        <span class="instagram-text">Instagramはこちら</span>
+      </div>
+    </div>
+
+    <!-- 紹介セクション -->
+    <section id="about" class="section about-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">北習志野てわたし図書館</h2>
+          <div class="section-divider divider-green"></div>
+        </div>
+
+        <div class="about-content">
+          <div class="about-image-container">
+            <img src="./assets/images/oner.png" alt="北習志野てわたし図書館長の写真" class="about-image" />
+          </div>
+          <div class="about-text">
+            <!-- <h3 class="about-subtitle">ここがどのようなところ</h3> -->
+            <p class="about-description">
+                北習志野てわたし図書館は、地域の皆さんから<b>寄贈いただいた約3000冊の本を揃えた私営の図書館です。</b>地元が習志野台の夫婦で運営しています。
+                地域が元気になって欲しいという想いで始めました。その想いに共感いただける方々には是非ともご利用頂きたいと考えています。<br><br>
+                また、図書館は営業時間に関係なく、<b>貸切レンタルスペースとして、24時間365日利用いただくこともできます。</b>イベント、個人でお友達との集まり、ピアノ演奏会、ヨガ、お料理教室、映画鑑賞会など様々な利用事例があります。是非とも、ご相談ください。
+            </p>
+            <div class="search-button-container" role="group" aria-label="アクションボタン">
+              <a href="http://www.librarylife.net/booksearch/index/?location=0119&keyword=" class="search-button search-button--primary">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7" stroke-width="2"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>蔵書を検索する</span>
+              </a>
+              <a href="https://www.instagram.com/kitanarashino.tewatashi.lib" class="search-button search-button--secondary" target="_blank" rel="noopener noreferrer">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="16" rx="3" ry="3" stroke-width="2"/>
+                  <circle cx="12" cy="12" r="4" stroke-width="2"/>
+                </svg>
+                <span>お問い合わせはこちら</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 紹介動画 -->
+    <section id="video" class="section video-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">紹介動画</h2>
+          <div class="section-divider divider-green"></div>
+        </div>
+        <div class="video-container">
+          <div class="video-wrapper">
+                <video class="video-placeholder1" src="./assets/images/tewatashitosyokan.mov" controls></video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 館長からのお願い -->
+    <section id="message" class="section message-section">
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">てわたし図書館3つのお約束</h2>
+          <div class="section-divider divider-green"></div>
+        </div>
+        <!-- <p class="section-subtitle"><br><br><br>〜みんなで創るみんなの空間〜</p> -->
+        <div class="message-grid">
+          <div class="message-card message-card-1">
+            <div class="message-icon-wrapper message-icon-1">
+                <img src="./assets/images/1.png" alt="北習志野てわたし図書館長の写真" class="about-image" />
+              <!-- <svg class="message-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>
+              </svg> -->
+            </div>
+            <h3 class="message-title">あいさつをしよう<br/></h3>
+            <p class="message-text">まずは「こんにちは」から始めませんか？<br>初めてご利用の方も、いつものお顔も。<br>声を掛け合いましょう。</p>
+          </div>
+
+          <div class="message-card message-card-2">
+            <div class="message-icon-wrapper message-icon-2">
+                <img src="./assets/images/2.png" alt="北習志野てわたし図書館長の写真" class="about-image" />
+              <!-- <svg class="message-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg> -->
+            </div>
+            <h3 class="message-title">相手も想おう<br/></h3>
+            <p class="message-text">やさしい空間をみんなで創りましょう。<br>本を読んでいる方も、交流を楽しむ方も<br>お互いを思いやる気持ちで過ごしましょう。</p>
+          </div>
+
+          <div class="message-card message-card-3">
+            <div class="message-icon-wrapper message-icon-3">
+                <img src="./assets/images/3.png" alt="北習志野てわたし図書館長の写真" class="about-image" />
+              <!-- <svg class="message-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+              </svg> -->
+            </div>
+            <h3 class="message-title">街を楽しくしよう<br/></h3>
+            <p class="message-text">人と繋がる場所<br>あなたの「好き」を応援します。<br>あなたの「好き」をシェアして街を彩りましょう。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- カレンダー -->
+    <section id="calendar" class="section calendar-section">
+      <div class="section-container" style="max-width:80rem">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#78B85C">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke-width="2"/>
+              <line x1="16" y1="2" x2="16" y2="6" stroke-width="2" stroke-linecap="round"/>
+              <line x1="8" y1="2" x2="8" y2="6" stroke-width="2" stroke-linecap="round"/>
+              <line x1="3" y1="10" x2="21" y2="10" stroke-width="2"/>
+            </svg>
+            <h2 class="section-title">開館予定カレンダー</h2>
+          </div>
+          <div class="section-divider divider-green"></div>
+        </div>
+
+        <div class="calendar-card">
+          <div class="calendar-bookmark calendar-bookmark-left"></div>
+          <div class="calendar-bookmark calendar-bookmark-right"></div>
+
+          <div class="calendar-content">
+            <div class="calendar-info">
+              <div class="calendar-info-content">
+                <span class="calendar-badge">開館日</span>
+                <span class="calendar-info-text">毎週 火曜日・金曜日 11:00–17:00</span>
+              </div>
+            </div>
+
+            <div class="calendar-iframe-container">
+              <iframe
+                src="https://calendar.google.com/calendar/u/0/embed?height=600&wkst=1&bgcolor=%23ffffff&ctz=Asia/Tokyo&showTitle=0&showNav=1&showDate=1&showTabs=0&showCalendars=0&showTz=1&showPrint=0&src=cDJvdW45NDNucm02b3U0bTJuYWxkc3NsN2dAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23039BE5&pli=1"
+                title="開館カレンダー"></iframe>
+            </div>
+
+            <div class="calendar-notice">
+              <p class="calendar-notice-text">※ 臨時休館の場合はInstagramでお知らせします</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- アクセス -->
+    <section id="access" class="section">
+      <div class="section-container" style="max-width:96rem">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#FF6B6B">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <h2 class="section-title">アクセス</h2>
+          </div>
+          <div class="section-divider divider-red"></div>
+        </div>
+
+        <div class="access-grid">
+          <div class="map-card">
+            <div class="map-iframe-container">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d742.5715631156789!2d140.04551706468305!3d35.72327230683211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60228125d5f6dd09%3A0xb06a71c2e5855216!2sKitanarashinotewatashi%20Library!5e0!3m2!1sen!2sjp!4v1759291902950!5m2!1sen!2sjp"
+                allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                title="北習志野てわたし図書館の地図"></iframe>
+            </div>
+          </div>
+
+          <div class="info-cards">
+            <div class="info-card">
+              <div class="info-items">
+                <div class="info-item">
+                  <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <div class="info-item-content">
+                    <p class="info-item-label">所在地</p>
+                    <p class="info-item-value">
+                      〒274-0063<br/>千葉県船橋市習志野台2-49-14 1階
+                    </p>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                  </svg>
+                  <div class="info-item-content">
+                    <p class="info-item-label">電話</p>
+                    <p class="info-item-value">090-1856-7812</p>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-width="2"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"/>
+                  </svg>
+                  <div class="info-item-content">
+                    <p class="info-item-label">お問い合わせはInstagramへ</p>
+                    <p class="info-item-value"><a href="https://www.instagram.com/kitanarashino.tewatashi.lib" target="_blank">@kitanarashino.tewatashi.lib</a></p>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <svg class="info-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <div class="info-item-content">
+                    <p class="info-item-value" style="margin-top:0;font-weight:500">
+                      北習志野駅より徒歩4分
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="membership-card">
+              <h4 class="membership-title">会員登録について</h4>
+              <p class="membership-text">
+                会員登録は窓口でのみ受付けております。Web上での登録はできません。図書スペース開館日(火曜金曜11時〜17時まで)に館長までお声がけください
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Instagram セクション -->
+    <section id="latest" class="section">
+      <div class="section-container">
+        <div class="section-header">
+          <div class="section-title-wrapper">
+            <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#FF6B6B">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-width="2"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"/>
+            </svg>
+            <h2 class="section-title">最新情報はこちらから！</h2>
+          </div>
+          <!-- <div class="section-divider divider-red"></div> -->
+        </div>
+
+        <!-- デスクトップ: 4x4グリッド（投稿IDはダミー：必要に応じ差し替え） -->
+        <!-- <div class="instagram-desktop-grid">
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPNH3Taktsy/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DK_H7L_TZG1/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DJskUfhI6j2/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DJREE24zDXG/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C-1ytJpvFmz/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8g0qv-vhBD/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C39Zap2vAm1/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CqTxhsrPC_3/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CqPK6B8vgCI/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+        </div> -->
+
+        <!-- モバイル: 横スクロール -->
+        <div class="instagram-carousel">
+          <div class="carousel-container">
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DPNH3Taktsy/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DK_H7L_TZG1/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DJskUfhI6j2/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DJREE24zDXG/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C-1ytJpvFmz/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8g0qv-vhBD/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C39Zap2vAm1/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CqTxhsrPC_3/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CqPK6B8vgCI/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14"></blockquote>
+          </div>
+        </div>
+
+        <div class="instagram-button">
+          <a href="https://www.instagram.com/kitanarashino.tewatashi.lib"
+             target="_blank" rel="noopener noreferrer" class="btn-instagram">もっと見る</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <svg class="footer-logo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span class="footer-logo-text">北習志野てわたし図書館</span>
+        </div>
+        <!-- <p class="footer-tagline">シェアキッチンを備えた民間図書館</p> -->
+        <p class="footer-copyright">© 2025 北習志野てわたし図書館</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Instagram埋め込みスクリプト -->
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <!-- サイト用スクリプト -->
+  <script src="script.js"></script>
+</body>
+</html>
