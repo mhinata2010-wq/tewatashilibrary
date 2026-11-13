@@ -21,3 +21,6 @@ body{background:var(--paper)}
 .hero h1:first-line{background:#fffefe}
 .hero-bubble{font-family:"ads-akari","ADS-akari","fot-tsukuardgothic-std",sans-serif;font-weight:400}
 @media(max-width:800px){.hero-grid{min-height:480px}.hero-image{inset:8% 0 0 17%}.hero-copy{top:36%;width:80%}.hero h1{font-size:clamp(30px,7vw,54px)}}
+
+/* Photo gallery and responsive refinement, shared with rental */
+.library-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:32px}.library-gallery figure{margin:0;background:#edeae3}.library-gallery img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}.library-gallery figcaption{font-size:13px;padding:10px 14px;color:#403f3b}.logo img{max-width:240px;width:auto;object-fit:contain}.splash-logo{object-fit:contain}.instagram-empty{padding-block:18px}.hero-image img{object-position:50% 52%}.video-frame video{border-radius:3px}.about-copy p{overflow-wrap:anywhere}@media(max-width:600px){.library-gallery{grid-template-columns:1fr}.hero-grid{min-height:380px}.hero h1{font-size:clamp(29px,8vw,42px)}.splash-message{padding:0 22px;line-height:2.1;max-width:95vw}.nav{max-height:calc(100vh - 70px);overflow:auto}.hero-image{left:15%}}@media(prefers-reduced-motion:reduce){.hero,.library-gallery img{animation:none!important}}
