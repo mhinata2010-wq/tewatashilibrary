@@ -17,6 +17,18 @@ for (const device of ['desktop','mobile']) {
     assert(await page.locator('#hero-heading').isVisible());
     assert((await page.locator('.hero-image img').evaluate(el=>el.naturalWidth))>0,'Hero image must load');
   });
+  await check(device+' navigation moves to sections and tracks active item',async()=>{
+    const nav=page.locator('#primary-nav');
+    if(device==='mobile')await page.locator('.menu-toggle').click();
+    await nav.locator('a[href="#news"]').click();
+    await page.waitForFunction(()=>document.querySelector('#primary-nav a[href="#news"]')?.getAttribute('aria-current')==='location');
+    await page.waitForFunction(()=>Math.abs(document.querySelector('#news').getBoundingClientRect().top-document.querySelector('.site-header').getBoundingClientRect().height)<45);
+    assert.equal(await page.locator('#primary-nav a[href="#news"]').getAttribute('aria-current'),'location');
+    const videoLink=page.locator('.hero-video-link');
+    assert(await videoLink.count()===1,'missing video CTA');
+    await videoLink.click();
+    await page.waitForFunction(()=>Math.abs(document.querySelector('#video').getBoundingClientRect().top-document.querySelector('.site-header').getBoundingClientRect().height)<45);
+  });
   await check(device+' about expands', async () => {
     await page.locator('#open-about').click();
     assert(await page.locator('#about-content').isVisible());
