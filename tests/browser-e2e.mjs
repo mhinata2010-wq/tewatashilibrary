@@ -22,6 +22,13 @@ for (const device of ['desktop','mobile']) {
     assert(await page.locator('#about-content').isVisible());
     assert.equal(await page.locator('#open-about').getAttribute('aria-expanded'),'true');
   });
+  await check(device+' missing MP4 shows usable photo fallback', async () => {
+    const fallback=page.locator('#video-fallback');
+    await fallback.waitFor({state:'visible',timeout:8000});
+    assert(await fallback.locator('img').evaluate(el=>el.naturalWidth)>0,'fallback image must load');
+    assert(await fallback.getByRole('link',{name:'写真を見る'}).isVisible(),'photo gallery CTA visible');
+    assert(!(await page.locator('#intro-video').isVisible()),'broken video player must be hidden');
+  });
   await check(device+' official promises render', async () => {
     for (const title of ['あいさつをしよう','相手も想おう','街を楽しくしよう']) {
       assert(await page.getByRole('heading',{name:title}).isVisible(),title);
