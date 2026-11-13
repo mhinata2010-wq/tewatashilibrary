@@ -50,3 +50,53 @@ const instagramPostUrls=[];
   video.addEventListener('loadedmetadata',()=>clearTimeout(mediaTimeout),{once:true});
   video.addEventListener('error',()=>clearTimeout(mediaTimeout),{once:true});
 })();
+
+// Accessible section navigation: smooth movement, fixed header offset, and active underline.
+(function initSectionNavigation(){
+ const nav=document.getElementById('primary-nav');
+ const header=document.querySelector('.site-header');
+ if(!nav||!header)return;
+ const anchors=[...nav.querySelectorAll('a[href^="#"]')];
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const sections=anchors.map(a=>({a,section:document.getElementById(a.hash.slice(1))})).filter(x=>x.section);
+ const setActive=target=>{
+   anchors.forEach(a=>{
+     const active=a.hash===target;
+     a.classList.toggle('is-active',active);
+     if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');
+   });
+ };
+ const goTo=(id,updateHistory=true)=>{
+   const el=document.getElementById(id);
+   if(!el)return;
+   const offset=header.getBoundingClientRect().height+14;
+   const y=Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset);
+   window.scrollTo({top:y,behavior:reduced.matches?'instant':'smooth'});
+   setActive('#'+id);
+   if(updateHistory)history.replaceState(null,'','#'+id);
+ };
+ anchors.forEach(a=>a.addEventListener('click',event=>{
+   const id=a.hash.slice(1);
+   if(!document.getElementById(id))return;
+   event.preventDefault();goTo(id);
+ }));
+ document.querySelectorAll('a.hero-video-link[href^="#"]').forEach(a=>a.addEventListener('click',event=>{
+   const id=a.hash.slice(1);if(!document.getElementById(id))return;
+   event.preventDefault();goTo(id);
+ }));
+ let scheduled=false;
+ const update=()=>{
+   scheduled=false;
+   const line=header.getBoundingClientRect().height+Math.min(160,window.innerHeight*.22);
+   let current=sections[0];
+   sections.forEach(item=>{if(item.section.getBoundingClientRect().top<=line)current=item});
+   if(current)setActive(current.a.hash);
+   header.classList.toggle('is-scrolled',window.scrollY>16);
+ };
+ window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(update)}},{passive:true});
+ window.addEventListener('resize',update,{passive:true});
+ update();
+ if(location.hash&&document.getElementById(location.hash.slice(1))){
+   window.addEventListener('load',()=>goTo(location.hash.slice(1),false),{once:true});
+ }
+})();
