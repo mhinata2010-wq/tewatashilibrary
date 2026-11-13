@@ -41,5 +41,12 @@ const instagramPostUrls=[];
   const showFallback=()=>{video.hidden=true;video.style.display='none';fallback.hidden=false};
   video.addEventListener('error',showFallback,{once:true});
   video.querySelector('source')?.addEventListener('error',showFallback,{once:true});
-  fetch(url,{method:'HEAD'}).then(r=>{if(!r.ok)showFallback()}).catch(showFallback);
+  // A HEAD request can be rejected (405/403) even when the video is playable.
+  // Trust the media element's error event rather than the HTTP HEAD response.
+  // Keep a bounded fallback for media that never loads or errors.
+  const mediaTimeout=setTimeout(()=>{
+    if(video.readyState===0 && video.networkState===HTMLMediaElement.NETWORK_NO_SOURCE)showFallback();
+  },8000);
+  video.addEventListener('loadedmetadata',()=>clearTimeout(mediaTimeout),{once:true});
+  video.addEventListener('error',()=>clearTimeout(mediaTimeout),{once:true});
 })();
