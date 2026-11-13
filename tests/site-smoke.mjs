@@ -23,6 +23,13 @@ for(const requirement of ['kqc5rmz','id="splash"','id="instagram-feed"','library
 const js=readFileSync(join(root,'redesign.js'),'utf8');
 assert(js.includes('setTimeout(finish,2800)'),'splash timeout');
 assert(js.includes('verifyIntroVideo'),'video fallback');
+assert(js.includes('initSectionNavigation'),'section navigation listener');
+assert(js.includes('aria-current'),'active navigation accessibility');
+assert(js.includes('scrollTo('),'navigation movement');
+const navTargets=['#about-intro','#news','#promises','#calendar','rental.html','#access'];
+for(const target of navTargets)assert(index.includes('href="'+target+'"'),'missing nav target: '+target);
+assert(index.includes('class="hero-video-link"'),'intro video CTA');
+assert(index.includes('id="intro-video"'),'video player');
 execFileSync('node',['--check',join(root,'redesign.js')]);
 const rental=readFileSync(join(root,'rental.html'),'utf8');
 assert(rental.includes('旧サイトのプレ期間価格'),'price disclaimer missing');
