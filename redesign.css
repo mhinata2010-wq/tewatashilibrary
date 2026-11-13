@@ -38,3 +38,6 @@ body{background:var(--paper)}
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Keyboard navigation: visible skip link and reliable focus after expanding About. */
+.skip-link{position:fixed;top:8px;left:12px;z-index:1000;transform:translateY(-160%);padding:12px 20px;background:#fff;color:#191919;border:2px solid #2563eb;border-radius:4px;font-size:15px;font-weight:700}.skip-link:focus{transform:translateY(0)}#about-content h2:focus-visible,#main-content:focus-visible{outline:3px solid #2563eb;outline-offset:5px}
