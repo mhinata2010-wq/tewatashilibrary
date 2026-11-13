@@ -14,3 +14,21 @@ document.addEventListener("DOMContentLoaded",()=>{const toggle=document.querySel
  if(!hero||hero.complete){finish()}else{hero.addEventListener('load',finish,{once:true});hero.addEventListener('error',finish,{once:true})}
  window.addEventListener('load',finish,{once:true});setTimeout(finish,2800);
 })();
+
+// Public Instagram post permalinks only. Add approved /p/ or /reel/ URLs to this list.
+// Profile links are not embeddable posts. No scraping, login tokens, or unverifiable images.
+const instagramPostUrls=[];
+(function renderInstagramPosts(){
+  const feed=document.getElementById('instagram-feed'),empty=document.getElementById('instagram-empty');
+  if(!feed)return;
+  const verified=instagramPostUrls.filter(url=>/^https:\/\/www\.instagram\.com\/(p|reel)\/[A-Za-z0-9_-]+\/?(?:\?.*)?$/.test(url));
+  verified.forEach(url=>{
+    const card=document.createElement('blockquote');card.className='instagram-media';
+    card.setAttribute('data-instgrm-permalink',url);card.setAttribute('data-instgrm-version','14');
+    const link=document.createElement('a');link.href=url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Instagram投稿を表示';
+    card.append(link);feed.append(card);
+  });
+  if(verified.length){if(empty)empty.hidden=true;
+    const script=document.createElement('script');script.async=true;script.src='https://www.instagram.com/embed.js';script.onload=()=>window.instgrm?.Embeds?.process();feed.after(script);
+  }
+})();
