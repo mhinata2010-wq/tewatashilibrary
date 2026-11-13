@@ -3,6 +3,21 @@ document.addEventListener("DOMContentLoaded",()=>{const toggle=document.querySel
 (function(){
  const intro=document.getElementById('open-about'), content=document.getElementById('about-content');
  function expandAbout(scroll){if(!content)return;content.hidden=false;content.classList.add('is-opening');if(intro)intro.setAttribute('aria-expanded','true');if(scroll)requestAnimationFrame(()=>{const heading=content.querySelector('h2');if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}document.getElementById('about')?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});}
+ // Deep links into collapsed facility content must reveal it before scrolling.
+ const facilityLink=document.querySelector('a[href="#facilities"]');
+ const revealFacilities=()=>{
+   expandAbout(false);
+   requestAnimationFrame(()=>{
+     const el=document.getElementById('facilities');if(!el)return;
+     const header=document.querySelector('.site-header');
+     const offset=(header?.getBoundingClientRect().height||0)+14;
+     const y=Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset);
+     window.scrollTo({top:y,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+     history.replaceState(null,'','#facilities');
+   });
+ };
+ facilityLink?.addEventListener('click',event=>{event.preventDefault();revealFacilities()});
+ if(location.hash==='#facilities')revealFacilities();
  intro?.addEventListener('click',()=>expandAbout(true));
  document.querySelectorAll('a[href="#about"]').forEach(a=>a.addEventListener('click',()=>expandAbout(false)));
  if(location.hash==='#about')expandAbout(false);
