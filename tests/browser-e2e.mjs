@@ -21,6 +21,16 @@ for (const device of ['desktop','mobile']) {
     await page.locator('#open-about').click();
     assert(await page.locator('#about-content').isVisible());
     assert.equal(await page.locator('#open-about').getAttribute('aria-expanded'),'true');
+    await page.waitForFunction(()=>document.activeElement?.closest('#about-content')!==null);
+    assert.equal(await page.locator('#about-content h2').first().getAttribute('tabindex'),'-1');
+  });
+  await check(device+' skip link reaches main content', async () => {
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+    await page.keyboard.press('Tab');
+    assert(await page.getByRole('link',{name:'本文へ移動'}).isFocused(),'skip link should be first keyboard target');
+    await page.keyboard.press('Enter');
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'main-content');
   });
   await check(device+' video is playable or has accessible fallback', async () => {
     const video=page.locator('#intro-video'),fallback=page.locator('#video-fallback');
@@ -78,6 +88,9 @@ for (const device of ['desktop','mobile']) {
       await toggle.click();assert.equal(await toggle.getAttribute('aria-expanded'),'true');
       await page.locator('#primary-nav a[href="#promises"]').click();
       assert.equal(await toggle.getAttribute('aria-expanded'),'false');
+      await toggle.click();await page.keyboard.press('Escape');
+      assert.equal(await toggle.getAttribute('aria-expanded'),'false');
+      assert(await toggle.isFocused(),'Escape restores focus to menu toggle');
     });
   }
   await check(device+' rental page and CTA',async()=>{
