@@ -22,12 +22,28 @@ for (const device of ['desktop','mobile']) {
     assert(await page.locator('#about-content').isVisible());
     assert.equal(await page.locator('#open-about').getAttribute('aria-expanded'),'true');
   });
-  await check(device+' missing MP4 shows usable photo fallback', async () => {
-    const fallback=page.locator('#video-fallback');
-    await fallback.waitFor({state:'visible',timeout:8000});
-    assert(await fallback.locator('img').evaluate(el=>el.naturalWidth)>0,'fallback image must load');
-    assert(await fallback.getByRole('link',{name:'写真を見る'}).isVisible(),'photo gallery CTA visible');
-    assert(!(await page.locator('#intro-video').isVisible()),'broken video player must be hidden');
+  await check(device+' video is playable or has accessible fallback', async () => {
+    const video=page.locator('#intro-video'),fallback=page.locator('#video-fallback');
+    const result=await page.evaluate(async()=>{
+      const video=document.querySelector('#intro-video');
+      const url=video?.querySelector('source')?.getAttribute('src');
+      if(!url)return 'missing';
+      try{const response=await fetch(url,{method:'HEAD'});return response.ok?'available':'missing'}
+      catch{return 'missing'}
+    });
+    if(result==='missing'){
+      await fallback.waitFor({state:'visible',timeout:8000});
+      assert(await fallback.locator('img').evaluate(el=>el.naturalWidth)>0,'fallback image must load');
+      assert(await fallback.getByRole('link',{name:'写真を見る'}).isVisible(),'photo CTA visible');
+      assert(!(await video.isVisible()),'missing media player must be hidden');
+    }else{
+      assert(await video.isVisible(),'available video should be visible');
+      await video.evaluate(el=>el.load());
+      await page.waitForFunction(()=>document.querySelector('#intro-video').readyState>=1,{timeout:10000});
+      const media=await video.evaluate(el=>({duration:el.duration,videoWidth:el.videoWidth,videoHeight:el.videoHeight}));
+      assert(Number.isFinite(media.duration)&&media.duration>0,'video metadata duration');
+      assert(media.videoWidth>0&&media.videoHeight>0,'video frames');
+    }
   });
   await check(device+' official promises render', async () => {
     for (const title of ['あいさつをしよう','相手も想おう','街を楽しくしよう']) {
