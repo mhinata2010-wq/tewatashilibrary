@@ -32,3 +32,14 @@ const instagramPostUrls=[];
     const script=document.createElement('script');script.async=true;script.src='https://www.instagram.com/embed.js';script.onload=()=>window.instgrm?.Embeds?.process();feed.after(script);
   }
 })();
+
+// Avoid showing a broken HTML5 video player while the media is not yet uploaded.
+(function verifyIntroVideo(){
+  const video=document.getElementById('intro-video'),fallback=document.getElementById('video-fallback');
+  const url=video?.querySelector('source')?.getAttribute('src');
+  if(!video||!fallback||!url)return;
+  const showFallback=()=>{video.hidden=true;video.style.display='none';fallback.hidden=false};
+  video.addEventListener('error',showFallback,{once:true});
+  video.querySelector('source')?.addEventListener('error',showFallback,{once:true});
+  fetch(url,{method:'HEAD'}).then(r=>{if(!r.ok)showFallback()}).catch(showFallback);
+})();
