@@ -57,14 +57,20 @@ for (const device of ['desktop','mobile']) {
       const title=getComputedStyle(document.querySelector('#hero-heading'));
       const adobeStyle=[...document.querySelectorAll('link[rel="stylesheet"]')].find(x=>x.href.includes('use.typekit.net'));
       const remote=performance.getEntriesByType('resource').filter(x=>x.name.includes('use.typekit.net')).map(x=>({name:x.name,status:x.responseStatus||null}));
-      return {bodyFont:body.fontFamily,titleFont:title.fontFamily,adobeKit:adobeStyle?.href||null,remote,loadedFonts:[...document.fonts].filter(x=>x.status==='loaded').map(x=>x.family)};
+      const declared=title.fontFamily.split(',').map(x=>x.trim().replace(/^["']|["']$/g,''));
+      const adobeCandidates=declared.filter(x=>/^(ads-akari|fot-tsukuardgothic-std)$/i.test(x));
+      const adobeFaces=[...document.fonts].filter(x=>adobeCandidates.some(f=>f.toLowerCase()===x.family.replace(/^["']|["']$/g,'').toLowerCase()));
+      const adobeLoaded=adobeFaces.filter(x=>x.status==='loaded').map(x=>({family:x.family,weight:x.weight}));
+      const adobeCheck=adobeCandidates.map(f=>({family:f,available:document.fonts.check('24px "'+f+'"','日本語')}));
+      return {bodyFont:body.fontFamily,titleFont:title.fontFamily,adobeKit:adobeStyle?.href||null,remote,loadedFonts:[...document.fonts].filter(x=>x.status==='loaded').map(x=>x.family),adobeCandidates,adobeLoaded,adobeCheck,adobeStatus:adobeLoaded.length?'font-face-loaded':'unverified-or-fallback'};
     });
     console.log('FONT_DIAGNOSTICS',device,JSON.stringify(result));
     assert(result.bodyFont.length>0,'computed body font missing');
     assert(result.titleFont.length>0,'computed title font missing');
     assert(result.adobeKit?.includes('kqc5rmz'),'Adobe kit link missing');
-    // A kit link does not prove that its font-family is actually applied.
-    // Keep actual Adobe font-family verification open until the kit CSS and browser render are checked.
+    // Report a clear status instead of treating the Adobe stylesheet link as proof of rendering.
+    // An actual loaded FontFace is necessary but still not sufficient to prove glyph-level use.
+    if(result.adobeStatus!=='font-face-loaded')console.warn('ADOBE_FONT_NOT_VERIFIED',device,JSON.stringify(result.adobeCheck));
   });
   await check(device+' no horizontal overflow', async () => {
     const dims=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,viewport:window.innerWidth}));
