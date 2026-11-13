@@ -39,7 +39,7 @@ for (const device of ['desktop','mobile']) {
     }else{
       assert(await video.isVisible(),'available video should be visible');
       await video.evaluate(el=>el.load());
-      await page.waitForFunction(()=>document.querySelector('#intro-video').readyState>=1,{timeout:10000});
+      await page.waitForFunction(()=>document.querySelector('#intro-video')?.readyState>=1,null,{timeout:10000});
       const media=await video.evaluate(el=>({duration:el.duration,videoWidth:el.videoWidth,videoHeight:el.videoHeight}));
       assert(Number.isFinite(media.duration)&&media.duration>0,'video metadata duration');
       assert(media.videoWidth>0&&media.videoHeight>0,'video frames');
