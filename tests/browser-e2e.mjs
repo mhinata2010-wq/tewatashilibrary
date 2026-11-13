@@ -50,6 +50,22 @@ for (const device of ['desktop','mobile']) {
       assert(await page.getByRole('heading',{name:title}).isVisible(),title);
     }
   });
+  await check(device+' typography diagnostics and fallback', async () => {
+    const result=await page.evaluate(async()=>{
+      await document.fonts.ready;
+      const body=getComputedStyle(document.body);
+      const title=getComputedStyle(document.querySelector('#hero-heading'));
+      const adobeStyle=[...document.querySelectorAll('link[rel="stylesheet"]')].find(x=>x.href.includes('use.typekit.net'));
+      const remote=performance.getEntriesByType('resource').filter(x=>x.name.includes('use.typekit.net')).map(x=>({name:x.name,status:x.responseStatus||null}));
+      return {bodyFont:body.fontFamily,titleFont:title.fontFamily,adobeKit:adobeStyle?.href||null,remote,loadedFonts:[...document.fonts].filter(x=>x.status==='loaded').map(x=>x.family)};
+    });
+    console.log('FONT_DIAGNOSTICS',device,JSON.stringify(result));
+    assert(result.bodyFont.length>0,'computed body font missing');
+    assert(result.titleFont.length>0,'computed title font missing');
+    assert(result.adobeKit?.includes('kqc5rmz'),'Adobe kit link missing');
+    // A kit link does not prove that its font-family is actually applied.
+    // Keep actual Adobe font-family verification open until the kit CSS and browser render are checked.
+  });
   await check(device+' no horizontal overflow', async () => {
     const dims=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,viewport:window.innerWidth}));
     assert(dims.doc<=dims.viewport+2,JSON.stringify(dims));
