@@ -40,7 +40,7 @@ for (const device of ['desktop','mobile']) {
     await page.goto(base+'/',{waitUntil:'domcontentloaded'});
     await page.locator('#splash').waitFor({state:'detached',timeout:7000});
     await page.keyboard.press('Tab');
-    assert(await page.getByRole('link',{name:'本文へ移動'}).isFocused(),'skip link should be first keyboard target');
+    assert(await page.getByRole('link',{name:'本文へ移動'}).evaluate(el=>document.activeElement===el),'skip link should be first keyboard target');
     await page.keyboard.press('Enter');
     assert.equal(await page.evaluate(()=>document.activeElement?.id),'main-content');
   });
@@ -102,7 +102,7 @@ for (const device of ['desktop','mobile']) {
       assert.equal(await toggle.getAttribute('aria-expanded'),'false');
       await toggle.click();await page.keyboard.press('Escape');
       assert.equal(await toggle.getAttribute('aria-expanded'),'false');
-      assert(await toggle.isFocused(),'Escape restores focus to menu toggle');
+      assert(await toggle.evaluate(el=>document.activeElement===el),'Escape restores focus to menu toggle');
     });
   }
   await check(device+' rental page and CTA',async()=>{
