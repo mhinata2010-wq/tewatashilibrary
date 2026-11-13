@@ -24,22 +24,18 @@ for (const device of ['desktop','mobile']) {
   });
   await check(device+' video is playable or has accessible fallback', async () => {
     const video=page.locator('#intro-video'),fallback=page.locator('#video-fallback');
-    const result=await page.evaluate(async()=>{
-      const video=document.querySelector('#intro-video');
-      const url=video?.querySelector('source')?.getAttribute('src');
-      if(!url)return 'missing';
-      try{const response=await fetch(url,{method:'HEAD'});return response.ok?'available':'missing'}
-      catch{return 'missing'}
-    });
-    if(result==='missing'){
-      await fallback.waitFor({state:'visible',timeout:8000});
+    // Do not use HEAD as a proxy for media playback: some hosts reject HEAD.
+    await page.waitForFunction(()=>{
+      const v=document.querySelector('#intro-video');
+      const f=document.querySelector('#video-fallback');
+      return (v?.readyState>=1)||(f && !f.hidden);
+    },null,{timeout:11000});
+    if(await fallback.isVisible()){
       assert(await fallback.locator('img').evaluate(el=>el.naturalWidth)>0,'fallback image must load');
       assert(await fallback.getByRole('link',{name:'写真を見る'}).isVisible(),'photo CTA visible');
-      assert(!(await video.isVisible()),'missing media player must be hidden');
+      assert(!(await video.isVisible()),'failed media player must be hidden');
     }else{
-      assert(await video.isVisible(),'available video should be visible');
-      await video.evaluate(el=>el.load());
-      await page.waitForFunction(()=>document.querySelector('#intro-video')?.readyState>=1,null,{timeout:10000});
+      assert(await video.isVisible(),'loaded video should be visible');
       const media=await video.evaluate(el=>({duration:el.duration,videoWidth:el.videoWidth,videoHeight:el.videoHeight}));
       assert(Number.isFinite(media.duration)&&media.duration>0,'video metadata duration');
       assert(media.videoWidth>0&&media.videoHeight>0,'video frames');
