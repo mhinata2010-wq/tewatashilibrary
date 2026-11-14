@@ -62,16 +62,32 @@ const instagramPostUrls=[];
  video.querySelector('source').addEventListener('error',fail);
  video.addEventListener('loadedmetadata',showPlayer);
  video.addEventListener('canplay',showPlayer);
+ // One retry lifecycle at a time. Do not accumulate stale event listeners or timers.
+ let retryCleanup=null;
  retry?.addEventListener('click',()=>{
+   if(retry.disabled)return;
+   retryCleanup?.();
    terminalError=false;
    retry.disabled=true;
    retry.textContent='読み込み中…';
+   const restore=()=>{
+     retryCleanup?.();
+     retry.disabled=false;
+     retry.textContent='動画を再読み込み';
+   };
+   const onLoaded=()=>restore();
+   const onError=()=>restore();
+   const timeout=setTimeout(restore,8500);
+   retryCleanup=()=>{
+     clearTimeout(timeout);
+     video.removeEventListener('loadedmetadata',onLoaded);
+     video.removeEventListener('error',onError);
+     retryCleanup=null;
+   };
+   video.addEventListener('loadedmetadata',onLoaded);
+   video.addEventListener('error',onError);
    video.load();
    armTimeout();
-   const restore=()=>{retry.disabled=false;retry.textContent='動画を再読み込み'};
-   video.addEventListener('loadedmetadata',restore,{once:true});
-   video.addEventListener('error',restore,{once:true});
-   setTimeout(restore,8500);
  });
  armTimeout();
 })();
