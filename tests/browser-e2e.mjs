@@ -29,6 +29,19 @@ for (const device of ['desktop','mobile']) {
     await videoLink.click();
     await page.waitForFunction(()=>Math.abs(document.querySelector('#video').getBoundingClientRect().top-document.querySelector('.site-header').getBoundingClientRect().height)<45);
   });
+  await check(device+' nav browser back restores previous section',async()=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+    assert.equal(await page.locator('#primary-nav a[aria-current="location"]').count(),0,'hero should not highlight a section');
+    if(device==='mobile')await page.locator('.menu-toggle').click();
+    await page.locator('#primary-nav a[href="#news"]').click();
+    assert.equal(new URL(page.url()).hash,'#news');
+    if(device==='mobile')await page.locator('.menu-toggle').click();
+    await page.locator('#primary-nav a[href="#calendar"]').click();
+    assert.equal(new URL(page.url()).hash,'#calendar');
+    await page.goBack({waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>location.hash==='#news'&&document.querySelector('#primary-nav a[href="#news"]')?.getAttribute('aria-current')==='location');
+  });
   await check(device+' about expands', async () => {
     await page.locator('#open-about').click();
     assert(await page.locator('#about-content').isVisible());
