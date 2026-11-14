@@ -25,6 +25,8 @@ for(const requirement of ['kqc5rmz','id="splash"','id="instagram-feed"','library
 const js=readFileSync(join(root,'redesign.js'),'utf8');
 assert(js.includes('setTimeout(finish,2800)'),'splash timeout');
 assert(js.includes('verifyIntroVideo'),'video fallback');
+assert(index.includes('id="video-retry"'),'video retry button');
+assert(js.includes("video.load()"),'video retry reload');
 assert(js.includes('if(video.readyState===0)showFallback()'),'stalled video timeout fallback');
 assert(js.includes("video.addEventListener('loadedmetadata',()=>{clearTimeout(mediaTimeout);showPlayer()})"),'late metadata must recover video player');
 assert(js.includes('if(terminalError)return'),'terminal media errors must not recover player');
