@@ -53,19 +53,21 @@ const instagramPostUrls=[];
   const video=document.getElementById('intro-video'),fallback=document.getElementById('video-fallback');
   const url=video?.querySelector('source')?.getAttribute('src');
   if(!video||!fallback||!url)return;
+  let terminalError=false;
   const showFallback=()=>{video.hidden=true;video.style.display='none';fallback.hidden=false};
-  video.addEventListener('error',showFallback,{once:true});
-  video.querySelector('source')?.addEventListener('error',showFallback,{once:true});
-  // A HEAD request can be rejected (405/403) even when the video is playable.
-  // Trust the media element's error event rather than the HTTP HEAD response.
-  // Fail visibly when media is stalled indefinitely, not only when NETWORK_NO_SOURCE.
-  // A delayed connection should never leave a blank player on screen forever.
-  const mediaTimeout=setTimeout(()=>{
-    if(video.readyState===0)showFallback();
-  },8000);
-  video.addEventListener('loadedmetadata',()=>clearTimeout(mediaTimeout),{once:true});
-  video.addEventListener('error',()=>clearTimeout(mediaTimeout),{once:true});
-})();
+  const showPlayer=()=>{
+    if(terminalError)return;
+    video.hidden=false;video.style.removeProperty('display');fallback.hidden=true;
+  };
+  const fail=()=>{terminalError=true;clearTimeout(mediaTimeout);showFallback()};
+  video.addEventListener('error',fail,{once:true});
+  video.querySelector('source')?.addEventListener('error',fail,{once:true});
+  // An 8-second timeout is a temporary stalled state, not proof that the file is invalid.
+  // Recover the player if slow media eventually becomes available.
+  const mediaTimeout=setTimeout(()=>{if(video.readyState===0)showFallback()},8000);
+  video.addEventListener('loadedmetadata',()=>{clearTimeout(mediaTimeout);showPlayer()});
+  video.addEventListener('canplay',showPlayer);
+})();;
 
 // Accessible section navigation: smooth movement, fixed header offset, and active underline.
 (function initSectionNavigation(){
