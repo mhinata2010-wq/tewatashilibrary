@@ -11,7 +11,9 @@ for(const page of ['index.html','rental.html']){
  for(const [,href] of html.matchAll(/href="#([^"]+)"/g)) assert(ids.has(href),`${page}: missing #${href}`);
  for(const [, ,asset] of html.matchAll(/(?:src|poster)="(\.\/)?(assets\/images\/[^"?#]+)"/g)){
   if(asset.endsWith('tewatashitosyokan.mp4')){
-   assert(html.includes('id="video-fallback"'),`${page}: missing fallback for pending video`);continue;
+   assert(html.includes('id="video-fallback"'),`${page}: missing fallback for pending video`);
+   if(!existsSync(join(root,asset))) console.warn('MEDIA_BLOCKER: MP4 missing from repository:',asset);
+   continue;
   }
   assert(existsSync(join(root,asset)),`${page}: missing image ${asset}`);
  }
@@ -23,6 +25,7 @@ for(const requirement of ['kqc5rmz','id="splash"','id="instagram-feed"','library
 const js=readFileSync(join(root,'redesign.js'),'utf8');
 assert(js.includes('setTimeout(finish,2800)'),'splash timeout');
 assert(js.includes('verifyIntroVideo'),'video fallback');
+assert(js.includes('if(video.readyState===0)showFallback()'),'stalled video timeout fallback');
 assert(js.includes('initSectionNavigation'),'section navigation listener');
 assert(js.includes('aria-current'),'active navigation accessibility');
 assert(js.includes('scrollTo('),'navigation movement');
