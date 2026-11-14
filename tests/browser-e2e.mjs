@@ -165,6 +165,20 @@ for (const device of ['desktop','mobile']) {
       assert(await toggle.evaluate(el=>document.activeElement===el),'Escape restores focus to menu toggle');
     });
   }
+  await check(device+' legacy service links and embeds remain intact',async()=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+    const book=page.getByRole('link',{name:'蔵書を検索する'});
+    await page.locator('#open-about').click();
+    assert((await book.getAttribute('href')).includes('librarylife.net/booksearch/'),'book search destination changed');
+    const calendar=page.getByTitle('てわたし図書館 開館カレンダー');
+    assert((await calendar.getAttribute('src')).startsWith('https://calendar.google.com/calendar/'),'calendar embed changed');
+    const map=page.getByTitle('北習志野てわたし図書館の地図');
+    assert((await map.getAttribute('src')).startsWith('https://www.google.com/maps/embed'),'map embed changed');
+    const instagram=page.getByRole('link',{name:'公式Instagram'});
+    assert((await instagram.getAttribute('href')).includes('instagram.com/kitanarashino.tewatashi.lib'),'Instagram profile changed');
+    assert(await page.getByRole('link',{name:'レンタルスペース詳細'}).isVisible(),'rental navigation missing');
+  });
   await check(device+' rental page and CTA',async()=>{
     await page.goto(base+'/rental.html',{waitUntil:'domcontentloaded'});
     assert(await page.getByRole('heading',{level:1}).isVisible());
