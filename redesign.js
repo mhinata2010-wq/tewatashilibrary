@@ -89,7 +89,7 @@ const instagramPostUrls=[];
    const y=Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset);
    window.scrollTo({top:y,behavior:reduced.matches?'instant':'smooth'});
    setActive('#'+id);
-   if(updateHistory)history.replaceState(null,'','#'+id);
+   if(updateHistory && location.hash!=='#'+id)history.pushState(null,'','#'+id);
  };
  anchors.forEach(a=>a.addEventListener('click',event=>{
    const id=a.hash.slice(1);
@@ -104,13 +104,14 @@ const instagramPostUrls=[];
  const update=()=>{
    scheduled=false;
    const line=header.getBoundingClientRect().height+Math.min(160,window.innerHeight*.22);
-   let current=sections[0];
+   let current=null;
    sections.forEach(item=>{if(item.section.getBoundingClientRect().top<=line)current=item});
-   if(current)setActive(current.a.hash);
+   setActive(current?.a.hash||'');
    header.classList.toggle('is-scrolled',window.scrollY>16);
  };
  window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(update)}},{passive:true});
  window.addEventListener('resize',update,{passive:true});
+ window.addEventListener('popstate',()=>{const id=location.hash.slice(1);if(id&&document.getElementById(id))goTo(id,false);else window.scrollTo({top:0,behavior:reduced.matches?'instant':'smooth'});});
  update();
  if(location.hash&&document.getElementById(location.hash.slice(1))){
    window.addEventListener('load',()=>goTo(location.hash.slice(1),false),{once:true});
