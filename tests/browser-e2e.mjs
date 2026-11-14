@@ -78,6 +78,18 @@ for (const device of ['desktop','mobile']) {
       assert(await page.getByRole('heading',{name:title}).isVisible(),title);
     }
   });
+  await check(device+' Figma promise circles are responsive and round',async()=>{
+    const circles=await page.locator('#promises .promise').evaluateAll(elements=>elements.map(el=>{
+      const rect=el.getBoundingClientRect();
+      return {width:rect.width,height:rect.height,radius:getComputedStyle(el).borderTopLeftRadius};
+    }));
+    assert.equal(circles.length,3,'three official promises');
+    for(const circle of circles){
+      assert(Math.abs(circle.width-circle.height)<2,'promise panel must be circular: '+JSON.stringify(circle));
+      assert(circle.radius==='50%','promise panel radius must be circular');
+      assert(circle.width>=(device==='desktop'?300:250),'promise circle too small: '+circle.width);
+    }
+  });
   await check(device+' typography diagnostics and fallback', async () => {
     const result=await page.evaluate(async()=>{
       await document.fonts.ready;
