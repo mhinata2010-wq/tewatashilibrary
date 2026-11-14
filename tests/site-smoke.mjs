@@ -7,7 +7,9 @@ for(const page of ['index.html','rental.html']){
  const html=readFileSync(join(root,page),'utf8');
  assert.match(html,/<html\s+lang="ja"/i, `${page}: Japanese page language`);
  assert.match(html,/name="viewport"/,`${page}: viewport`);
- const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+ const allIds=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+ assert.equal(new Set(allIds).size,allIds.length,`${page}: duplicate HTML id values`);
+ const ids=new Set(allIds);
  for(const [,href] of html.matchAll(/href="#([^"]+)"/g)) assert(ids.has(href),`${page}: missing #${href}`);
  for(const [, ,asset] of html.matchAll(/(?:src|poster)="(\.\/)?(assets\/images\/[^"?#]+)"/g)){
   if(asset.endsWith('tewatashitosyokan.mp4')){
