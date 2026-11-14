@@ -50,7 +50,7 @@ assert(js.includes('if(terminalError)return'),'terminal media errors must not re
 assert(js.includes('initSectionNavigation'),'section navigation listener');
 assert(js.includes('aria-current'),'active navigation accessibility');
 assert(js.includes('scrollTo('),'navigation movement');
-const navTargets=['#about-intro','#news','#promises','#calendar','rental.html','#access'];
+const navTargets=['#about-intro','#video','#news','#promises','#calendar','rental.html','#access'];
 for(const target of navTargets)assert(index.includes('href="'+target+'"'),'missing nav target: '+target);
 assert(index.includes('class="hero-video-link"'),'intro video CTA');
 assert(index.includes('id="intro-video"'),'video player');
@@ -66,3 +66,8 @@ for(const name of ['hero-figma.png','about-figma.png','kitchen-figma.png','piano
  const gallery=index.split('id="gallery"')[1]?.split('</section>')[0]||'';
  assert.match(gallery,new RegExp('<figure><span class="image-fallback" hidden>写真を準備中</span><img data-fallback src="\\./assets/images/'+escaped+'"'),`gallery fallback missing: ${name}`);
 }
+
+// Figma video navigation and descriptive facility images must survive future redesigns.
+assert.match(index, /<nav[^>]*id="primary-nav"[^>]*>[\s\S]*?<a href="#video">紹介動画<\/a>/, 'Figma introduction-video navigation missing');
+assert.match(index, /src="\.\/assets\/images\/piano-figma\.png"[^>]*alt="ピアノのある交流スペース"/, 'piano photo accessible label missing');
+assert.match(index, /src="\.\/assets\/images\/kitchen-figma\.png"[^>]*alt="図書館のキッチン"/, 'kitchen photo accessible label missing');
