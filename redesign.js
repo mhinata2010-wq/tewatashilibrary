@@ -50,24 +50,31 @@ const instagramPostUrls=[];
 
 // Avoid showing a broken HTML5 video player while the media is not yet uploaded.
 (function verifyIntroVideo(){
-  const video=document.getElementById('intro-video'),fallback=document.getElementById('video-fallback');
-  const url=video?.querySelector('source')?.getAttribute('src');
-  if(!video||!fallback||!url)return;
-  let terminalError=false;
-  const showFallback=()=>{video.hidden=true;video.style.display='none';fallback.hidden=false};
-  const showPlayer=()=>{
-    if(terminalError)return;
-    video.hidden=false;video.style.removeProperty('display');fallback.hidden=true;
-  };
-  const fail=()=>{terminalError=true;clearTimeout(mediaTimeout);showFallback()};
-  video.addEventListener('error',fail,{once:true});
-  video.querySelector('source')?.addEventListener('error',fail,{once:true});
-  // An 8-second timeout is a temporary stalled state, not proof that the file is invalid.
-  // Recover the player if slow media eventually becomes available.
-  const mediaTimeout=setTimeout(()=>{if(video.readyState===0)showFallback()},8000);
-  video.addEventListener('loadedmetadata',()=>{clearTimeout(mediaTimeout);showPlayer()});
-  video.addEventListener('canplay',showPlayer);
-})();;
+ const video=document.getElementById('intro-video'),fallback=document.getElementById('video-fallback');
+ const retry=document.getElementById('video-retry');
+ if(!video||!fallback||!video.querySelector('source'))return;
+ let timer=null, terminalError=false;
+ const showFallback=()=>{video.hidden=true;video.style.display='none';fallback.hidden=false};
+ const showPlayer=()=>{if(terminalError)return;clearTimeout(timer);video.hidden=false;video.style.removeProperty('display');fallback.hidden=true};
+ const armTimeout=()=>{clearTimeout(timer);timer=setTimeout(()=>{if(video.readyState===0)showFallback()},8000)};
+ const fail=()=>{terminalError=true;clearTimeout(timer);showFallback()};
+ video.addEventListener('error',fail);
+ video.querySelector('source').addEventListener('error',fail);
+ video.addEventListener('loadedmetadata',showPlayer);
+ video.addEventListener('canplay',showPlayer);
+ retry?.addEventListener('click',()=>{
+   terminalError=false;
+   retry.disabled=true;
+   retry.textContent='読み込み中…';
+   video.load();
+   armTimeout();
+   const restore=()=>{retry.disabled=false;retry.textContent='動画を再読み込み'};
+   video.addEventListener('loadedmetadata',restore,{once:true});
+   video.addEventListener('error',restore,{once:true});
+   setTimeout(restore,8500);
+ });
+ armTimeout();
+})();
 
 // Accessible section navigation: smooth movement, fixed header offset, and active underline.
 (function initSectionNavigation(){
