@@ -92,6 +92,25 @@ for (const device of ['desktop','mobile']) {
       await video.evaluate(el=>el.pause());
     }
   });
+  await check(device+' missing video can retry without duplicate clicks',async()=>{
+    // The repository has no MP4 yet. Do not mistake fallback success for video playback.
+    const source=page.locator('#intro-video source');
+    const src=await source.getAttribute('src');
+    const response=await page.request.get(new URL(src,base+'/').toString());
+    if(response.ok()){
+      console.log('VIDEO_PRESENT: retry fallback branch not applicable; playback checked separately');
+      return;
+    }
+    const fallback=page.locator('#video-fallback');
+    await fallback.waitFor({state:'visible',timeout:11000});
+    const retry=page.locator('#video-retry');
+    assert(await retry.isVisible(),'retry button should be visible when video missing');
+    await retry.click();
+    assert(await retry.isDisabled(),'retry should disable during loading');
+    await page.waitForFunction(()=>!document.querySelector('#video-retry')?.disabled,null,{timeout:11000});
+    assert(await retry.isEnabled(),'retry should recover after timeout/error');
+    assert(await fallback.isVisible(),'fallback should remain available after unsuccessful retry');
+  });
   await check(device+' official promises render', async () => {
     for (const title of ['あいさつをしよう','相手も想おう','街を楽しくしよう']) {
       assert(await page.getByRole('heading',{name:title}).isVisible(),title);
