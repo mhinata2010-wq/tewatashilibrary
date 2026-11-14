@@ -55,3 +55,12 @@ body{background:var(--paper)}
 @media(min-width:801px){.nav{gap:clamp(11px,1.4vw,25px);font-size:clamp(11px,.88vw,15px)}.header-inner{gap:18px}.logo img{max-width:185px}}
 @media(max-width:800px){.nav{background:var(--paper,#f5f4ee);box-shadow:0 12px 20px rgba(0,0,0,.08)}.nav a{display:flex;min-height:50px}.nav a::after{right:auto;width:100%;bottom:0;transform-origin:left}.hero-video-link{margin-top:12px}}
 @media(prefers-reduced-motion:reduce){.site-header,.nav a,.nav a::after,.hero-video-link{transition:none!important}}
+
+/* Figma Frame 8 (60:514): three 420px circular promise panels on 1920px canvas. */
+#promises .container{width:min(1440px,calc(100% - 64px));max-width:none}
+#promises .promises{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));justify-items:center;gap:clamp(18px,2.4vw,42px)}
+#promises .promise{width:100%;max-width:420px;height:auto;aspect-ratio:1;border-radius:50%;padding:clamp(20px,3vw,55px)}
+#promises .promise h3{font-size:clamp(17px,1.55vw,25px);line-height:1.45;margin-bottom:clamp(10px,1.5vw,25px)}
+#promises .promise p{font-size:clamp(12px,.98vw,16px);line-height:1.85;overflow-wrap:anywhere}
+@media(max-width:800px){#promises .container{width:calc(100% - 36px)}#promises .promises{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}#promises .promise{max-width:340px;padding:24px}#promises .promise p{font-size:12px}}
+@media(max-width:560px){#promises .promises{grid-template-columns:1fr;gap:22px}#promises .promise{width:min(100%,320px);max-width:320px;padding:35px}#promises .promise h3{font-size:19px}#promises .promise p{font-size:13px}}
