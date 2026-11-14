@@ -168,6 +168,19 @@ for (const device of ['desktop','mobile']) {
     const profile=page.getByRole('link',{name:'公式Instagram'});
     assert((await profile.getAttribute('href')).includes('instagram.com/kitanarashino.tewatashi.lib'),'official profile must remain accessible');
   });
+  await check(device+' official gallery images load without unrelated substitutes',async()=>{
+    const expected=['hero-figma.png','about-figma.png','kitchen-figma.png','piano-figma.png'];
+    const images=page.locator('#gallery .library-gallery img');
+    assert.equal(await images.count(),expected.length,'gallery asset count changed');
+    for(let i=0;i<expected.length;i++){
+      const img=images.nth(i);
+      assert((await img.getAttribute('src')).endsWith('/'+expected[i]),'unexpected gallery asset at '+i);
+      await img.scrollIntoViewIfNeeded();
+      await img.evaluate(el=>{if(el.loading==='lazy')el.loading='eager';});
+      await img.evaluate(el=>el.decode());
+      assert((await img.evaluate(el=>el.naturalWidth))>0,'gallery image failed to decode: '+expected[i]);
+    }
+  });
   await check(device+' no horizontal overflow', async () => {
     const dims=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,viewport:window.innerWidth}));
     assert(dims.doc<=dims.viewport+2,JSON.stringify(dims));
