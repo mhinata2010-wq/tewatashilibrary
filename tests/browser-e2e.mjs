@@ -71,6 +71,12 @@ for (const device of ['desktop','mobile']) {
       const media=await video.evaluate(el=>({duration:el.duration,videoWidth:el.videoWidth,videoHeight:el.videoHeight}));
       assert(Number.isFinite(media.duration)&&media.duration>0,'video metadata duration');
       assert(media.videoWidth>0&&media.videoHeight>0,'video frames');
+      // Metadata alone does not prove playback. Check the actual media clock when MP4 exists.
+      await video.evaluate(el=>{el.muted=true;});
+      await video.evaluate(async el=>{await el.play();});
+      await page.waitForFunction(()=>document.querySelector('#intro-video')?.currentTime>0.1,null,{timeout:12000});
+      assert((await video.evaluate(el=>el.currentTime))>0.1,'video must advance beyond metadata');
+      await video.evaluate(el=>el.pause());
     }
   });
   await check(device+' official promises render', async () => {
