@@ -32,6 +32,10 @@ assert(js.includes("video.addEventListener('loadedmetadata',showPlayer)"),'late 
 assert(js.includes("video.addEventListener('canplay',showPlayer)"),'late playable media must recover video player');
 assert(js.includes("retry?.addEventListener('click'"),'retry action listener');
 assert(js.includes('retry.disabled=true'),'retry button must prevent duplicate requests');
+assert(js.includes('retryCleanup?.()'),'retry must clear previous listeners and timer');
+assert(js.includes("video.removeEventListener('loadedmetadata',onLoaded)"),'retry removes metadata listener');
+assert(js.includes("video.removeEventListener('error',onError)"),'retry removes error listener');
+assert(js.includes('clearTimeout(timeout)'),'retry timeout must be cancelled');
 assert(js.includes('if(terminalError)return'),'terminal media errors must not recover player');
 assert(js.includes('initSectionNavigation'),'section navigation listener');
 assert(js.includes('aria-current'),'active navigation accessibility');
