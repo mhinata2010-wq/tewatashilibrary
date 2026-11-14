@@ -51,3 +51,10 @@ const rental=readFileSync(join(root,'rental.html'),'utf8');
 assert(rental.includes('旧サイトのプレ期間価格'),'price disclaimer missing');
 assert(rental.includes('instagram.com/kitanarashino.tewatashi.lib'),'contact missing');
 console.log('PASS: site structure, references, existing functions, video fallback, JavaScript syntax');
+
+// Gallery must never render a broken-image icon when a source is unavailable.
+for(const name of ['hero-figma.png','about-figma.png','kitchen-figma.png','piano-figma.png']){
+ const escaped=name.replaceAll('.', '\\.');
+ const gallery=index.split('id="gallery"')[1]?.split('</section>')[0]||'';
+ assert.match(gallery,new RegExp('<figure><span class="image-fallback" hidden>写真を準備中</span><img data-fallback src="\\./assets/images/'+escaped+'"'),`gallery fallback missing: ${name}`);
+}
