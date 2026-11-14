@@ -58,9 +58,10 @@ const instagramPostUrls=[];
   video.querySelector('source')?.addEventListener('error',showFallback,{once:true});
   // A HEAD request can be rejected (405/403) even when the video is playable.
   // Trust the media element's error event rather than the HTTP HEAD response.
-  // Keep a bounded fallback for media that never loads or errors.
+  // Fail visibly when media is stalled indefinitely, not only when NETWORK_NO_SOURCE.
+  // A delayed connection should never leave a blank player on screen forever.
   const mediaTimeout=setTimeout(()=>{
-    if(video.readyState===0 && video.networkState===HTMLMediaElement.NETWORK_NO_SOURCE)showFallback();
+    if(video.readyState===0)showFallback();
   },8000);
   video.addEventListener('loadedmetadata',()=>clearTimeout(mediaTimeout),{once:true});
   video.addEventListener('error',()=>clearTimeout(mediaTimeout),{once:true});
