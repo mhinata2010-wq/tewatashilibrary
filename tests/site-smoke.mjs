@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync,existsSync} from 'node:fs';
+import {readFileSync,existsSync,statSync,openSync,readSync,closeSync} from 'node:fs';
 import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
 const root=process.cwd();
@@ -15,6 +15,14 @@ for(const page of ['index.html','rental.html']){
   if(asset.endsWith('tewatashitosyokan.mp4')){
    assert(html.includes('id="video-fallback"'),`${page}: missing fallback for pending video`);
    if(!existsSync(join(root,asset))) console.warn('MEDIA_BLOCKER: MP4 missing from repository:',asset);
+   else {
+    const path=join(root,asset);
+    assert(statSync(path).size>=1024,`${page}: MP4 file is unexpectedly small`);
+    const fd=openSync(path,'r'), header=Buffer.alloc(12);
+    try{assert.equal(readSync(fd,header,0,12,0),12,`${page}: MP4 header too short`);}
+    finally{closeSync(fd);}
+    assert.equal(header.toString('ascii',4,8),'ftyp',`${page}: invalid MP4 container header`);
+   }
    continue;
   }
   assert(existsSync(join(root,asset)),`${page}: missing image ${asset}`);
