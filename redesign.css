@@ -64,3 +64,8 @@ body{background:var(--paper)}
 #promises .promise p{font-size:clamp(12px,.98vw,16px);line-height:1.85;overflow-wrap:anywhere}
 @media(max-width:800px){#promises .container{width:calc(100% - 36px)}#promises .promises{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}#promises .promise{max-width:340px;padding:24px}#promises .promise p{font-size:12px}}
 @media(max-width:560px){#promises .promises{grid-template-columns:1fr;gap:22px}#promises .promise{width:min(100%,320px);max-width:320px;padding:35px}#promises .promise h3{font-size:19px}#promises .promise p{font-size:13px}}
+
+/* Keep gallery layout intact when an approved image is unavailable. */
+.library-gallery figure{position:relative}
+.library-gallery figure>.image-fallback:not([hidden]){position:relative;aspect-ratio:16/10;display:flex;background:#edeae3}
+.library-gallery figure>.image-fallback[hidden]{display:none}
