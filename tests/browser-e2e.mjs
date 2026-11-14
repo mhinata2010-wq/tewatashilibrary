@@ -150,6 +150,24 @@ for (const device of ['desktop','mobile']) {
     // An actual loaded FontFace is necessary but still not sufficient to prove glyph-level use.
     if(result.adobeStatus!=='font-face-loaded')console.warn('ADOBE_FONT_NOT_VERIFIED',device,JSON.stringify(result.adobeCheck));
   });
+  await check(device+' Instagram posts have honest empty state',async()=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+    const feed=page.locator('#instagram-feed');
+    const embeds=feed.locator('iframe,blockquote.instagram-media');
+    const empty=page.locator('#instagram-empty');
+    if(await embeds.count()===0){
+      assert(await empty.isVisible(),'missing official post URLs must show a visible empty state');
+      assert.match(await empty.innerText(),/準備中/,'empty state must not imply live Instagram synchronization');
+    }else{
+      for(const iframe of await feed.locator('iframe').all()){
+        const src=await iframe.getAttribute('src');
+        assert(/^https:\/\/www\.instagram\.com\/(p|reel)\//.test(src||''),'only official Instagram post embeds are allowed');
+      }
+    }
+    const profile=page.getByRole('link',{name:'公式Instagram'});
+    assert((await profile.getAttribute('href')).includes('instagram.com/kitanarashino.tewatashi.lib'),'official profile must remain accessible');
+  });
   await check(device+' no horizontal overflow', async () => {
     const dims=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,viewport:window.innerWidth}));
     assert(dims.doc<=dims.viewport+2,JSON.stringify(dims));
