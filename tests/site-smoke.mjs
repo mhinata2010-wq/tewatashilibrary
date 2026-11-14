@@ -26,6 +26,8 @@ const js=readFileSync(join(root,'redesign.js'),'utf8');
 assert(js.includes('setTimeout(finish,2800)'),'splash timeout');
 assert(js.includes('verifyIntroVideo'),'video fallback');
 assert(js.includes('if(video.readyState===0)showFallback()'),'stalled video timeout fallback');
+assert(js.includes("video.addEventListener('loadedmetadata',()=>{clearTimeout(mediaTimeout);showPlayer()})"),'late metadata must recover video player');
+assert(js.includes('if(terminalError)return'),'terminal media errors must not recover player');
 assert(js.includes('initSectionNavigation'),'section navigation listener');
 assert(js.includes('aria-current'),'active navigation accessibility');
 assert(js.includes('scrollTo('),'navigation movement');
