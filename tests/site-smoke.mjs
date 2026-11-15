@@ -86,3 +86,7 @@ assert(index.includes('href="#facilities"'), 'facilities CTA missing');
 assert(js.includes("facilityLink?.addEventListener('click'"), 'facilities CTA must expand collapsed About panel');
 assert(js.includes("if(location.hash==='#facilities')revealFacilities()"), 'direct facilities deep link must expand About panel');
 assert(js.includes("history.replaceState(null,'','#facilities')"), 'facilities navigation must preserve its URL fragment');
+
+// Reduced-motion scrolling must use a standard ScrollBehavior value.
+assert(!/behavior\s*:\s*[^,}\n]*['\"]instant['\"]/.test(js), 'nonstandard instant scroll behavior');
+assert(js.includes("reduced.matches?'auto':'smooth'"), 'reduced-motion section navigation must use auto');
