@@ -71,3 +71,7 @@ for(const name of ['hero-figma.png','about-figma.png','kitchen-figma.png','piano
 assert.match(index, /<nav[^>]*id="primary-nav"[^>]*>[\s\S]*?<a href="#video">紹介動画<\/a>/, 'Figma introduction-video navigation missing');
 assert.match(index, /src="\.\/assets\/images\/piano-figma\.png"[^>]*alt="ピアノのある交流スペース"/, 'piano photo accessible label missing');
 assert.match(index, /src="\.\/assets\/images\/kitchen-figma\.png"[^>]*alt="図書館のキッチン"/, 'kitchen photo accessible label missing');
+
+// CSS must respect the HTML hidden attribute for every image placeholder.
+const redesignCss=readFileSync(join(root,'redesign.css'),'utf8');
+assert.match(redesignCss,/\.image-fallback\[hidden\]\s*\{\s*display\s*:\s*none\s*;?\s*\}/,'hidden fallback labels must not overlay successfully loaded images');
