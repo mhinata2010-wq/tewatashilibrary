@@ -136,7 +136,7 @@ const instagramPostUrls=[];
  };
  window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(update)}},{passive:true});
  window.addEventListener('resize',update,{passive:true});
- window.addEventListener('popstate',()=>{const id=location.hash.slice(1);if(id==='facilities'){revealFacilities();return;}if(id==='about'){expandAbout(false);}if(id&&document.getElementById(id))goTo(id,false);else window.scrollTo({top:0,behavior:reduced.matches?'auto':'smooth'});});
+ window.addEventListener('popstate',()=>{const id=location.hash.slice(1);if(id==='facilities'){document.querySelector('a[href="#facilities"]')?.click();return;}if(id==='about'){document.getElementById('open-about')?.click();}if(id&&document.getElementById(id))goTo(id,false);else window.scrollTo({top:0,behavior:reduced.matches?'auto':'smooth'});});
  update();
  if(location.hash&&document.getElementById(location.hash.slice(1))){
    window.addEventListener('load',()=>goTo(location.hash.slice(1),false),{once:true});
