@@ -69,3 +69,6 @@ body{background:var(--paper)}
 .library-gallery figure{position:relative}
 .library-gallery figure>.image-fallback:not([hidden]){position:relative;aspect-ratio:16/10;display:flex;background:#edeae3}
 .library-gallery figure>.image-fallback[hidden]{display:none}
+
+/* Hidden fallback labels must remain invisible while their images load. */
+.image-fallback[hidden]{display:none}
