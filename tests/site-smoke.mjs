@@ -92,5 +92,5 @@ assert(!/behavior\s*:\s*[^,}\n]*['\"]instant['\"]/.test(js), 'nonstandard instan
 assert(js.includes("reduced.matches?'auto':'smooth'"), 'reduced-motion section navigation must use auto');
 
 // Browser history must reveal nested sections before attempting to scroll to them.
-assert(js.includes("if(id==='facilities'){revealFacilities();return;}"), 'history navigation must reveal collapsed facilities');
-assert(js.includes("if(id==='about'){expandAbout(false);}"), 'history navigation must reveal collapsed About');
+assert(js.includes("if(id==='facilities'){document.querySelector('a[href=\"#facilities\"]')?.click();return;}"), 'history navigation must use the registered facilities handler');
+assert(js.includes("if(id==='about'){document.getElementById('open-about')?.click();}"), 'history navigation must use the registered About handler');
