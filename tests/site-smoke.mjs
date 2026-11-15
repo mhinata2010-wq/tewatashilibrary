@@ -80,3 +80,9 @@ assert.match(redesignCss,/\.image-fallback\[hidden\]\s*\{\s*display\s*:\s*none\s
 for(const category of ['お知らせ','カレンダー','レンタル']) assert(index.includes('<span class="news-category">'+category+'</span>'), 'missing news category: '+category);
 assert(!/<time\s+datetime="2026-11">/.test(index), 'placeholder dates must not be presented as real publication dates');
 assert(redesignCss.includes('.news-row .news-category{'), 'news category label style missing');
+
+// A facilities anchor lives inside a collapsed About panel; both click and direct URL must reveal it.
+assert(index.includes('href="#facilities"'), 'facilities CTA missing');
+assert(js.includes("facilityLink?.addEventListener('click'"), 'facilities CTA must expand collapsed About panel');
+assert(js.includes("if(location.hash==='#facilities')revealFacilities()"), 'direct facilities deep link must expand About panel');
+assert(js.includes("history.replaceState(null,'','#facilities')"), 'facilities navigation must preserve its URL fragment');
