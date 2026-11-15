@@ -91,6 +91,7 @@ assert(js.includes("if(location.hash!=='#facilities')history.pushState(null,'','
 assert(!/behavior\s*:\s*[^,}\n]*['\"]instant['\"]/.test(js), 'nonstandard instant scroll behavior');
 assert(js.includes("reduced.matches?'auto':'smooth'"), 'reduced-motion section navigation must use auto');
 
-// Browser history must reveal nested sections before attempting to scroll to them.
-assert(js.includes("if(id==='facilities'){document.querySelector('a[href=\"#facilities\"]')?.click();return;}"), 'history navigation must use the registered facilities handler');
-assert(js.includes("if(id==='about'){document.getElementById('open-about')?.click();}"), 'history navigation must use the registered About handler');
+// History restoration must expand nested sections without synthesizing clicks or new entries.
+assert(js.includes("if(id==='facilities'||id==='about')"), 'history must reveal collapsed About content');
+assert(js.includes("goTo(id,false,true)"), 'popstate must restore without pushing history or smooth-scroll race');
+assert(js.includes("const goTo=(id,updateHistory=true,restore=false)=>"), 'history restore mode must be explicit');
