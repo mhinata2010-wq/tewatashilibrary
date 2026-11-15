@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded",()=>{const toggle=document.querySel
      const offset=(header?.getBoundingClientRect().height||0)+14;
      const y=Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset);
      window.scrollTo({top:y,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
-     history.replaceState(null,'','#facilities');
+     if(location.hash!=='#facilities')history.pushState(null,'','#facilities');
    });
  };
  facilityLink?.addEventListener('click',event=>{event.preventDefault();revealFacilities()});
