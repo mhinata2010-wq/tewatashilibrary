@@ -59,6 +59,18 @@ for (const device of ['desktop','mobile']) {
     await page.waitForFunction(()=>Math.abs(document.querySelector('#facilities').getBoundingClientRect().top-document.querySelector('.site-header').getBoundingClientRect().height)<45);
     assert.equal(await page.locator('#open-about').getAttribute('aria-expanded'),'true');
   });
+  await check(device+' facility back navigation does not add history',async()=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+    await page.getByRole('link',{name:'図書館の設備を見る'}).click();
+    await page.waitForFunction(()=>location.hash==='#facilities');
+    await page.evaluate(()=>history.pushState(null,'','#news'));
+    await page.goBack({waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>location.hash==='#facilities'&&!document.getElementById('about-content').hidden);
+    await page.goBack({waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>location.hash==='');
+    assert.equal(new URL(page.url()).hash,'','Back must leave facilities instead of looping');
+  });
   await check(device+' skip link reaches main content', async () => {
     await page.goto(base+'/',{waitUntil:'domcontentloaded'});
     await page.locator('#splash').waitFor({state:'detached',timeout:7000});
