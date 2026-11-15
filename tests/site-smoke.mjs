@@ -75,3 +75,8 @@ assert.match(index, /src="\.\/assets\/images\/kitchen-figma\.png"[^>]*alt="図�
 // CSS must respect the HTML hidden attribute for every image placeholder.
 const redesignCss=readFileSync(join(root,'redesign.css'),'utf8');
 assert.match(redesignCss,/\.image-fallback\[hidden\]\s*\{\s*display\s*:\s*none\s*;?\s*\}/,'hidden fallback labels must not overlay successfully loaded images');
+
+// News categories are labels, not fabricated publication dates.
+for(const category of ['お知らせ','カレンダー','レンタル']) assert(index.includes('<span class="news-category">'+category+'</span>'), 'missing news category: '+category);
+assert(!/<time\s+datetime="2026-11">/.test(index), 'placeholder dates must not be presented as real publication dates');
+assert(redesignCss.includes('.news-row .news-category{'), 'news category label style missing');
