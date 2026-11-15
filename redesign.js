@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded",()=>{const toggle=document.querySel
      const header=document.querySelector('.site-header');
      const offset=(header?.getBoundingClientRect().height||0)+14;
      const y=Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset);
-     window.scrollTo({top:y,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+     window.scrollTo({top:y,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
      history.replaceState(null,'','#facilities');
    });
  };
@@ -112,7 +112,7 @@ const instagramPostUrls=[];
    if(!el)return;
    const offset=header.getBoundingClientRect().height+14;
    const y=Math.max(0,window.scrollY+el.getBoundingClientRect().top-offset);
-   window.scrollTo({top:y,behavior:reduced.matches?'instant':'smooth'});
+   window.scrollTo({top:y,behavior:reduced.matches?'auto':'smooth'});
    setActive('#'+id);
    if(updateHistory && location.hash!=='#'+id)history.pushState(null,'','#'+id);
  };
@@ -136,7 +136,7 @@ const instagramPostUrls=[];
  };
  window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(update)}},{passive:true});
  window.addEventListener('resize',update,{passive:true});
- window.addEventListener('popstate',()=>{const id=location.hash.slice(1);if(id&&document.getElementById(id))goTo(id,false);else window.scrollTo({top:0,behavior:reduced.matches?'instant':'smooth'});});
+ window.addEventListener('popstate',()=>{const id=location.hash.slice(1);if(id&&document.getElementById(id))goTo(id,false);else window.scrollTo({top:0,behavior:reduced.matches?'auto':'smooth'});});
  update();
  if(location.hash&&document.getElementById(location.hash.slice(1))){
    window.addEventListener('load',()=>goTo(location.hash.slice(1),false),{once:true});
