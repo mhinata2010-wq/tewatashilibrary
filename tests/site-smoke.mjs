@@ -84,7 +84,7 @@ assert(redesignCss.includes('.news-row .news-category{'), 'news category label s
 // A facilities anchor lives inside a collapsed About panel; both click and direct URL must reveal it.
 assert(index.includes('href="#facilities"'), 'facilities CTA missing');
 assert(js.includes("facilityLink?.addEventListener('click'"), 'facilities CTA must expand collapsed About panel');
-assert(js.includes("if(location.hash==='#facilities')revealFacilities()"), 'direct facilities deep link must expand About panel');
+assert(js.includes("if(location.hash==='#facilities')expandAbout(false)"), 'direct facilities deep link must expand About panel without creating a history entry');
 assert(js.includes("if(location.hash!=='#facilities')history.pushState(null,'','#facilities')"), 'facilities navigation must create a navigable browser history entry without duplicates');
 
 // Reduced-motion scrolling must use a standard ScrollBehavior value.
