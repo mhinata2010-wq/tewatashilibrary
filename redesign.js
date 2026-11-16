@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded",()=>{const toggle=document.querySel
    });
  };
  facilityLink?.addEventListener('click',event=>{event.preventDefault();revealFacilities()});
- if(location.hash==='#facilities')revealFacilities();
+ // On a direct #facilities load, reveal the section without adding a history entry.\n if(location.hash==='#facilities')expandAbout(false);
  intro?.addEventListener('click',()=>expandAbout(true));
  document.querySelectorAll('a[href="#about"]').forEach(a=>a.addEventListener('click',()=>expandAbout(false)));
  if(location.hash==='#about')expandAbout(false);
