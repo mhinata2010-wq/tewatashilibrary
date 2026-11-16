@@ -71,6 +71,16 @@ for (const device of ['desktop','mobile']) {
     await page.waitForFunction(()=>location.hash==='');
     assert.equal(new URL(page.url()).hash,'','Back must leave facilities instead of looping');
   });
+  await check(device+' direct facilities deep link preserves history',async()=>{
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.goto(base+'/#facilities',{waitUntil:'domcontentloaded'});
+    await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+    assert(await page.locator('#about-content').isVisible(),'deep link should reveal facilities');
+    assert.equal(new URL(page.url()).hash,'#facilities');
+    await page.goBack({waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>location.hash==='');
+    assert.equal(new URL(page.url()).hash,'','deep link must not create a duplicate history entry');
+  });
   await check(device+' skip link reaches main content', async () => {
     await page.goto(base+'/',{waitUntil:'domcontentloaded'});
     await page.locator('#splash').waitFor({state:'detached',timeout:7000});
