@@ -143,7 +143,7 @@ const instagramPostUrls=[];
      const about=document.getElementById('about-content');
      if(about){about.hidden=false;about.classList.add('is-opening');document.getElementById('open-about')?.setAttribute('aria-expanded','true');}
    }
-   requestAnimationFrame(()=>{if(id&&document.getElementById(id))goTo(id,false,true);else {window.scrollTo({top:0,behavior:'instant'});setActive('');}});});
+   requestAnimationFrame(()=>{if(id&&document.getElementById(id))goTo(id,false,true);else {window.scrollTo({top:0,behavior:'auto'});setActive('');}});});
  update();
  if(location.hash&&document.getElementById(location.hash.slice(1))){
    window.addEventListener('load',()=>goTo(location.hash.slice(1),false),{once:true});
