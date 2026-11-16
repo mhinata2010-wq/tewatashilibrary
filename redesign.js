@@ -137,11 +137,13 @@ const instagramPostUrls=[];
  };
  window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(update)}},{passive:true});
  window.addEventListener('resize',update,{passive:true});
+ // Own history scrolling so the browser does not race the fixed-header offset.
+ if('scrollRestoration' in history)history.scrollRestoration='manual';
  window.addEventListener('popstate',()=>{const id=location.hash.slice(1);if(id==='facilities'||id==='about'){
      const about=document.getElementById('about-content');
      if(about){about.hidden=false;about.classList.add('is-opening');document.getElementById('open-about')?.setAttribute('aria-expanded','true');}
    }
-   if(id&&document.getElementById(id))goTo(id,false,true);else window.scrollTo({top:0,behavior:reduced.matches?'auto':'smooth'});});
+   requestAnimationFrame(()=>{if(id&&document.getElementById(id))goTo(id,false,true);else {window.scrollTo({top:0,behavior:'instant'});setActive('');}});});
  update();
  if(location.hash&&document.getElementById(location.hash.slice(1))){
    window.addEventListener('load',()=>goTo(location.hash.slice(1),false),{once:true});
