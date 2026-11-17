@@ -119,6 +119,16 @@ assert(index.includes('https://www.instagram.com/kitanarashino.tewatashi.lib'), 
 assert(!/href="https?:\/\/www\.instagram\.com\/p\/[^"]+"/.test(index), 'individual Instagram post links require verification');
 
 
+// Keep the official video source explicit and report its release-blocking status.
+// A successful fallback test must never be interpreted as successful MP4 playback.
+assert.match(index, /<source\\s+src="\\.\\/assets\\/images\\/tewatashitosyokan\\.mp4"\\s+type="video\\/mp4"/, 'official MP4 source must not silently disappear');
+const officialVideo=join(root,'assets/images/tewatashitosyokan.mp4');
+if (!existsSync(officialVideo)) {
+ console.warn('RELEASE_BLOCKER: official introduction MP4 is not registered; fallback is not video playback');
+} else {
+ console.log('MEDIA_PRESENT: official MP4 exists; actual playback still requires browser E2E');
+}
+
 // Rental inquiry must continue to use the official Instagram account, not an unverified post or placeholder.
 assert(rental.includes('https://www.instagram.com/kitanarashino.tewatashi.lib/'), 'rental Instagram inquiry link missing');
 for (const [pageName, pageHtml] of [['index.html', index], ['rental.html', rental]]) {
