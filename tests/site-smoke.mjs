@@ -106,3 +106,10 @@ assert(index.includes('id="instagram-empty"'), 'Instagram empty-state message mi
 assert(index.includes('Instagramの個別投稿への連携は準備中です'), 'unverified Instagram posts must be disclosed');
 assert(index.includes('https://www.instagram.com/kitanarashino.tewatashi.lib'), 'official Instagram destination missing');
 assert(!/href="https?:\/\/www\.instagram\.com\/p\/[^"]+"/.test(index), 'individual Instagram post links require verification');
+
+
+// Rental inquiry must continue to use the official Instagram account, not an unverified post or placeholder.
+assert(rental.includes('https://www.instagram.com/kitanarashino.tewatashi.lib/'), 'rental Instagram inquiry link missing');
+for (const [pageName, pageHtml] of [['index.html', index], ['rental.html', rental]]) {
+ assert(!/href=["']https?:\/\/www\.instagram\.com\/(?:p|reel|tv)\/[^"']+["']/.test(pageHtml), pageName+': unverified Instagram content URL');
+}
