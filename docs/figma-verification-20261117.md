@@ -18,3 +18,12 @@ Scope: [Figma Page 1](https://www.figma.com/design/uuFSMfj60ioWbv8D2R8RgQ/) and 
 4. Run Playwright E2E and capture screenshots for every Figma screen; compare typography, assets, interactions, accessibility and responsive behavior. Record actual test commands and outputs in the PR.
 
 **Release gate:** No main merge, Pages deployment, permission change or publication without explicit owner approval. See Issues #1, #2, #5, #7, #9 and Draft PR #10.
+
+## 2026-11-18 07:32 JST — Figma screen inventory audit (metadata only)
+
+- Figma Page 1 (0:1) metadata retrieved. Named screen-flow nodes: 33:147 ホーム画面, 33:148 てわたし図書館について, 33:152 ３つのお約束, 33:156 紹介動画, 33:163 アクセス, 33:168 最新情報. These are flow labels, not verified browser screens.
+- Introduction video frame 15:534 = 600×339, nested 15:273 = 435.35×289.00, and 13:120 = 377.95×212.60. Design metadata only, not CSS acceptance measurements.
+- GitHub Contents API on the feature branch returned 404 for assets/images/tewatashitosyokan.mp4. Playback remains unverified; retain existing photo fallback. Do not substitute unrelated media.
+- No browser execution, screenshot comparison, or new CI verification was performed this run. Metadata retrieval is not pixel-level QA.
+- Page 1 also includes independent reference assets and flow labels; not every top-level object is a production screen. Map design nodes to site routes before implementing further visual changes.
+- Remaining blockers: authorized source photos/video, verified Instagram post URLs, Adobe Fonts computed/loaded family verification, facility approval of three promises, and complete desktop/mobile visual QA. No main merge or deployment without approval.
