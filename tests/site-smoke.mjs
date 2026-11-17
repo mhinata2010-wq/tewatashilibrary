@@ -121,7 +121,7 @@ assert(!/href="https?:\/\/www\.instagram\.com\/p\/[^"]+"/.test(index), 'individu
 
 // Keep the official video source explicit and report its release-blocking status.
 // A successful fallback test must never be interpreted as successful MP4 playback.
-assert.match(index, /<source\\s+src="\\.\\/assets\\/images\\/tewatashitosyokan\\.mp4"\\s+type="video\\/mp4"/, 'official MP4 source must not silently disappear');
+assert(index.includes('<source src="./assets/images/tewatashitosyokan.mp4" type="video/mp4">'), 'official MP4 source must not silently disappear');
 const officialVideo=join(root,'assets/images/tewatashitosyokan.mp4');
 if (!existsSync(officialVideo)) {
  console.warn('RELEASE_BLOCKER: official introduction MP4 is not registered; fallback is not video playback');
