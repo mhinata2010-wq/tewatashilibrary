@@ -60,6 +60,7 @@ assert(index.includes('class="hero-video-link"'),'intro video CTA');
 assert(index.includes('id="intro-video"'),'video player');
 execFileSync('node',['--check',join(root,'redesign.js')]);
 const rental=readFileSync(join(root,'rental.html'),'utf8');
+assert.match(rental,/<main\s+id="rental-main"\s+tabindex="-1">/, 'rental skip-link target must be programmatically focusable');
 assert(rental.includes('旧サイトのプレ期間価格'),'price disclaimer missing');
 assert(rental.includes('instagram.com/kitanarashino.tewatashi.lib'),'contact missing');
 console.log('PASS: site structure, references, existing functions, video fallback, JavaScript syntax');
