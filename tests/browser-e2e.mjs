@@ -250,6 +250,17 @@ for (const device of ['desktop','mobile']) {
     await page.goto(base+'/rental.html',{waitUntil:'domcontentloaded'});
     assert(await page.getByRole('heading',{level:1}).isVisible());
     assert(await page.locator('a[href*="instagram.com"]').count()>0);
+    // Protect the historical-pricing disclaimer and the actual rental inquiry path.
+    const pricing=page.locator('#rental-pricing');
+    assert(await pricing.isVisible(),'rental pricing section must be visible');
+    assert((await pricing.innerText()).includes('旧サイトのプレ期間価格'),'historical rental pricing disclaimer missing');
+    assert((await pricing.innerText()).includes('現行料金・利用可能日時・利用条件は予約時にご確認ください'),'current terms must not be represented as confirmed');
+    const inquiry=page.locator('#rental-howto a.rental-contact');
+    assert(await inquiry.isVisible(),'rental inquiry CTA missing');
+    assert((await inquiry.getAttribute('href')).includes('instagram.com/kitanarashino.tewatashi.lib'),'rental inquiry destination changed');
+    assert.equal(await inquiry.getAttribute('target'),'_blank','external inquiry must open separately');
+    const rel=(await inquiry.getAttribute('rel')||'').split(/\\s+/);
+    assert(rel.includes('noopener')&&rel.includes('noreferrer'),'external inquiry must be isolated');
   });
   await context.close();
 }
