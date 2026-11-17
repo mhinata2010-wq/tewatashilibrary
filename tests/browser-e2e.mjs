@@ -133,10 +133,19 @@ for (const device of ['desktop','mobile']) {
     assert(await retry.isEnabled(),'retry should recover after timeout/error');
     assert(await fallback.isVisible(),'fallback should remain available after unsuccessful retry');
   });
-  await check(device+' official promises render', async () => {
-    for (const title of ['あいさつをしよう','相手も想おう','街を楽しくしよう']) {
-      assert(await page.getByRole('heading',{name:title}).isVisible(),title);
+  await check(device+' three promises include readable descriptions', async () => {
+    const promises=page.locator('#promises article.promise');
+    assert.equal(await promises.count(),3,'exactly three promises required');
+    const titles=['あいさつをしよう','相手も想おう','街を楽しくしよう'];
+    for(let i=0;i<titles.length;i++){
+      const promise=promises.nth(i);
+      assert.equal((await promise.locator('h3').innerText()).trim(),titles[i]);
+      const description=(await promise.locator('p').innerText()).trim();
+      assert(description.length>=20,'promise description missing or truncated: '+titles[i]);
+      assert(!/準備中|TODO|仮文|ダミー/.test(description),'placeholder promise copy: '+titles[i]);
+      assert(await promise.locator('p').isVisible(),'promise description hidden: '+titles[i]);
     }
+    // Structural copy checks are not a substitute for approval by the facility.
   });
   await check(device+' Figma promise circles are responsive and round',async()=>{
     const circles=await page.locator('#promises .promise').evaluateAll(elements=>elements.map(el=>{
