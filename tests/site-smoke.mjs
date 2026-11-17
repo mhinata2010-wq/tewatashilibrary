@@ -14,7 +14,11 @@ for(const page of ['index.html','rental.html']){
  for(const [, ,asset] of html.matchAll(/(?:src|poster)="(\.\/)?(assets\/images\/[^"?#]+)"/g)){
   if(asset.endsWith('tewatashitosyokan.mp4')){
    assert(html.includes('id="video-fallback"'),`${page}: missing fallback for pending video`);
-   if(!existsSync(join(root,asset))) console.warn('MEDIA_BLOCKER: MP4 missing from repository:',asset);
+   if(!existsSync(join(root,asset))){
+    const message='MEDIA_BLOCKER: MP4 missing from repository: '+asset;
+    if(process.env.REQUIRE_REAL_MEDIA==='1') assert.fail(message);
+    console.warn(message+' (set REQUIRE_REAL_MEDIA=1 to require actual video)');
+   }
    else {
     const path=join(root,asset);
     assert(statSync(path).size>=1024,`${page}: MP4 file is unexpectedly small`);
