@@ -259,7 +259,7 @@ for (const device of ['desktop','mobile']) {
     assert(await inquiry.isVisible(),'rental inquiry CTA missing');
     assert((await inquiry.getAttribute('href')).includes('instagram.com/kitanarashino.tewatashi.lib'),'rental inquiry destination changed');
     assert.equal(await inquiry.getAttribute('target'),'_blank','external inquiry must open separately');
-    const rel=(await inquiry.getAttribute('rel')||'').split(/\\s+/);
+    const rel=(await inquiry.getAttribute('rel')||'').split(/\s+/);
     assert(rel.includes('noopener')&&rel.includes('noreferrer'),'external inquiry must be isolated');
   });
   await context.close();
