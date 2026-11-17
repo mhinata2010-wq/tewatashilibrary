@@ -180,6 +180,11 @@ for (const device of ['desktop','mobile']) {
     // Report a clear status instead of treating the Adobe stylesheet link as proof of rendering.
     // An actual loaded FontFace is necessary but still not sufficient to prove glyph-level use.
     if(result.adobeStatus!=='font-face-loaded')console.warn('ADOBE_FONT_NOT_VERIFIED',device,JSON.stringify(result.adobeCheck));
+    // Opt-in release gate: a stylesheet URL alone is not proof that an Adobe font loaded.
+    if(process.env.REQUIRE_ADOBE_FONT==='1'){
+      assert(result.adobeCandidates.length>0,'Adobe font-family is not declared on the hero heading');
+      assert(result.adobeLoaded.length>0,'Adobe font-face did not load; check kit, license, network, and Figma font family');
+    }
   });
   await check(device+' Instagram posts have honest empty state',async()=>{
     await page.goto(base+'/',{waitUntil:'domcontentloaded'});
