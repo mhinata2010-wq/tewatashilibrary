@@ -246,6 +246,14 @@ for (const device of ['desktop','mobile']) {
     assert((await instagram.getAttribute('href')).includes('instagram.com/kitanarashino.tewatashi.lib'),'Instagram profile changed');
     assert(await page.getByRole('link',{name:'レンタルスペース詳細'}).isVisible(),'rental navigation missing');
   });
+  await check(device+' rental skip link focuses main',async()=>{
+    await page.goto(base+'/rental.html',{waitUntil:'domcontentloaded'});
+    await page.keyboard.press('Tab');
+    const skip=page.getByRole('link',{name:'本文へ移動'});
+    assert(await skip.evaluate(el=>document.activeElement===el),'rental skip link must be first keyboard target');
+    await page.keyboard.press('Enter');
+    assert.equal(await page.evaluate(()=>document.activeElement?.id),'rental-main','rental skip link must move keyboard focus into main');
+  });
   await check(device+' rental page and CTA',async()=>{
     await page.goto(base+'/rental.html',{waitUntil:'domcontentloaded'});
     assert(await page.getByRole('heading',{level:1}).isVisible());
