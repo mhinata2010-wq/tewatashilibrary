@@ -99,3 +99,10 @@ assert(js.includes("reduced.matches?'auto':'smooth'"), 'reduced-motion section n
 assert(js.includes("if(id==='facilities'||id==='about')"), 'history must reveal collapsed About content');
 assert(js.includes("goTo(id,false,true)"), 'popstate must restore without pushing history or smooth-scroll race');
 assert(js.includes("const goTo=(id,updateHistory=true,restore=false)=>"), 'history restore mode must be explicit');
+
+// Instagram must show a truthful empty state until official post URLs are verified.
+assert(index.includes('id="instagram-feed"'), 'Instagram feed container missing');
+assert(index.includes('id="instagram-empty"'), 'Instagram empty-state message missing');
+assert(index.includes('Instagramの個別投稿への連携は準備中です'), 'unverified Instagram posts must be disclosed');
+assert(index.includes('https://www.instagram.com/kitanarashino.tewatashi.lib'), 'official Instagram destination missing');
+assert(!/href="https?:\/\/www\.instagram\.com\/p\/[^"]+"/.test(index), 'individual Instagram post links require verification');
