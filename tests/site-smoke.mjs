@@ -63,6 +63,16 @@ const rental=readFileSync(join(root,'rental.html'),'utf8');
 assert.match(rental,/<main\s+id="rental-main"\s+tabindex="-1">/, 'rental skip-link target must be programmatically focusable');
 assert(rental.includes('旧サイトのプレ期間価格'),'price disclaimer missing');
 assert(rental.includes('instagram.com/kitanarashino.tewatashi.lib'),'contact missing');
+// Protect the legacy rental booking journey and make historical pricing unmistakable.
+assert(rental.includes('id="rental-pricing"'), 'rental pricing section missing');
+for (const amount of ['¥3,000〜','¥1,500〜']) assert(rental.includes(amount), 'historical rental price missing: '+amount);
+assert(rental.includes('旧サイトのプレ期間価格'), 'historical prices must be disclosed as non-current');
+assert(rental.includes('現行料金・利用可能日時・利用条件は予約時にご確認ください'), 'rental pricing requires current-terms disclaimer');
+assert(rental.includes('id="rental-howto"'), 'rental inquiry instructions missing');
+assert(rental.includes('Instagram DMから相談する'), 'rental inquiry flow missing');
+assert.match(rental, /href="https:\/\/www\.instagram\.com\/kitanarashino\.tewatashi\.lib\/"[^>]*target="_blank"[^>]*rel="noopener noreferrer"/, 'external Instagram inquiry link must be safe');
+assert.match(rental, /<iframe[^>]*title="てわたし図書館の開館カレンダー"[^>]*src="https:\/\/calendar\.google\.com\//, 'rental Google Calendar embed missing');
+
 console.log('PASS: site structure, references, existing functions, video fallback, JavaScript syntax');
 
 // Gallery must never render a broken-image icon when a source is unavailable.
