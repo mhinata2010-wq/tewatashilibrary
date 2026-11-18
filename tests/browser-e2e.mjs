@@ -168,10 +168,13 @@ for (const device of ['desktop','mobile']) {
       const remote=performance.getEntriesByType('resource').filter(x=>x.name.includes('use.typekit.net')).map(x=>({name:x.name,status:x.responseStatus||null}));
       const declared=title.fontFamily.split(',').map(x=>x.trim().replace(/^["']|["']$/g,''));
       const adobeCandidates=declared.filter(x=>/^(ads-akari|fot-tsukuardgothic-std)$/i.test(x));
+      const bodyCandidates=body.fontFamily.split(',').map(x=>x.trim().replace(/^["']|["']$/g,'')).filter(x=>/^(ads-akari|fot-tsukuardgothic-std)$/i.test(x));
+      for(const family of bodyCandidates) await document.fonts.load('16px "'+family+'"','図書館について');
+      const bodyLoaded=[...document.fonts].filter(x=>x.status==='loaded'&&bodyCandidates.some(f=>f.toLowerCase()===x.family.replace(/^["']|["']$/g,'').toLowerCase())).map(x=>({family:x.family,weight:x.weight}));
       const adobeFaces=[...document.fonts].filter(x=>adobeCandidates.some(f=>f.toLowerCase()===x.family.replace(/^["']|["']$/g,'').toLowerCase()));
       const adobeLoaded=adobeFaces.filter(x=>x.status==='loaded').map(x=>({family:x.family,weight:x.weight}));
       const adobeCheck=adobeCandidates.map(f=>({family:f,available:document.fonts.check('24px "'+f+'"','日本語')}));
-      return {bodyFont:body.fontFamily,titleFont:title.fontFamily,adobeKit:adobeStyle?.href||null,remote,loadedFonts:[...document.fonts].filter(x=>x.status==='loaded').map(x=>x.family),adobeCandidates,adobeLoaded,adobeCheck,adobeStatus:adobeLoaded.length?'font-face-loaded':'unverified-or-fallback'};
+      return {bodyFont:body.fontFamily,bodyCandidates,bodyLoaded,titleFont:title.fontFamily,adobeKit:adobeStyle?.href||null,remote,loadedFonts:[...document.fonts].filter(x=>x.status==='loaded').map(x=>x.family),adobeCandidates,adobeLoaded,adobeCheck,adobeStatus:adobeLoaded.length?'font-face-loaded':'unverified-or-fallback'};
     });
     console.log('FONT_DIAGNOSTICS',device,JSON.stringify(result));
     assert(result.bodyFont.length>0,'computed body font missing');
@@ -184,6 +187,8 @@ for (const device of ['desktop','mobile']) {
     if(process.env.REQUIRE_ADOBE_FONT==='1'){
       assert(result.adobeCandidates.length>0,'Adobe font-family is not declared on the hero heading');
       assert(result.adobeLoaded.length>0,'Adobe font-face did not load; check kit, license, network, and Figma font family');
+      assert(result.bodyCandidates.length>0,'Adobe body font-family is not declared');
+      assert(result.bodyLoaded.length>0,'Adobe body font-face did not load; verify Japanese body typography');
     }
   });
   await check(device+' Instagram posts have honest empty state',async()=>{
