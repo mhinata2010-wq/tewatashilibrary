@@ -36,6 +36,7 @@ jobs:
           name: browser-e2e-diagnostics
           path: |
             browser-e2e-results.log
+            browser-e2e-screenshots/*.png
             /tmp/tewatashi-server.log
           if-no-files-found: warn
           retention-days: 14
