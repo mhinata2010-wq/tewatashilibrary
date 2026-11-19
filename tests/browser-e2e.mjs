@@ -17,6 +17,56 @@ for (const device of ['desktop','mobile']) {
     assert(await page.locator('#hero-heading').isVisible());
     assert((await page.locator('.hero-image img').evaluate(el=>el.naturalWidth))>0,'Hero image must load');
   });
+  await check(device+' event carousel scrolls horizontally using controls and keyboard', async () => {
+    const track = page.locator('#event-carousel-track');
+    const prev = page.locator('#event-scroll-prev');
+    const next = page.locator('#event-scroll-next');
+    await track.scrollIntoViewIfNeeded();
+    const initial = await track.evaluate(el => ({
+      scrollWidth: el.scrollWidth, clientWidth: el.clientWidth,
+      cardCount: el.querySelectorAll('.event-carousel-card').length,
+      overflowX: getComputedStyle(el).overflowX,
+      snapType: getComputedStyle(el).scrollSnapType,
+    }));
+    assert.equal(initial.overflowX, 'auto', 'track must allow native horizontal scrolling');
+    assert(initial.scrollWidth > initial.clientWidth + 50, 'track needs real horizontal overflow');
+    assert(initial.cardCount >= 5, 'at least five placeholders to demonstrate scrolling');
+    assert(initial.snapType.includes('x'), 'carousel needs horizontal scroll snapping');
+    assert(await prev.isDisabled(), 'previous arrow disabled at start');
+    assert(await next.isEnabled(), 'next arrow enabled at start');
+
+    await next.click();
+    await page.waitForFunction(() => document.getElementById('event-carousel-track').scrollLeft > 30);
+    const afterNext = await track.evaluate(el => el.scrollLeft);
+    assert(afterNext > 30, 'next arrow must move scrollLeft');
+    await prev.click();
+    await page.waitForFunction(() => document.getElementById('event-carousel-track').scrollLeft < 10);
+    assert(await prev.isDisabled(), 'previous arrow disabled after returning to start');
+
+    await track.focus();
+    await page.keyboard.press('End');
+    await page.waitForFunction(() => {
+      const el = document.getElementById('event-carousel-track');
+      return Math.abs(el.scrollWidth - el.clientWidth - el.scrollLeft) < 3;
+    });
+    assert(await next.isDisabled(), 'next arrow disabled at far end');
+    await page.keyboard.press('Home');
+    await page.waitForFunction(() => document.getElementById('event-carousel-track').scrollLeft < 3);
+    assert(await prev.isDisabled(), 'Home returns to start');
+
+    if (device === 'desktop') {
+      const rect = await track.boundingBox();
+      await page.mouse.move(rect.x + rect.width * 0.75, rect.y + 80);
+      await page.mouse.down();
+      await page.mouse.move(rect.x + rect.width * 0.25, rect.y + 80, {steps: 12});
+      await page.mouse.up();
+      assert((await track.evaluate(el => el.scrollLeft)) > 30, 'mouse dragging must scroll horizontally');
+    }
+    const viewportOverflow = await page.evaluate(() =>
+      document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    assert(viewportOverflow <= 2, 'carousel must not create horizontal page overflow');
+  });
+
   await check(device+' navigation moves to sections and tracks active item',async()=>{
     const nav=page.locator('#primary-nav');
     if(device==='mobile')await page.locator('.menu-toggle').click();
