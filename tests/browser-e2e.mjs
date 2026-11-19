@@ -171,10 +171,12 @@ for (const device of ['desktop','mobile']) {
       const bodyCandidates=body.fontFamily.split(',').map(x=>x.trim().replace(/^["']|["']$/g,'')).filter(x=>/^(ads-akari|fot-tsukuardgothic-std)$/i.test(x));
       for(const family of bodyCandidates) await document.fonts.load('16px "'+family+'"','図書館について');
       const bodyLoaded=[...document.fonts].filter(x=>x.status==='loaded'&&bodyCandidates.some(f=>f.toLowerCase()===x.family.replace(/^["']|["']$/g,'').toLowerCase())).map(x=>({family:x.family,weight:x.weight}));
+      const kitResponse=performance.getEntriesByType('resource').filter(x=>x.name.includes('use.typekit.net/kqc5rmz')).map(x=>({name:x.name,status:x.responseStatus||null,duration:x.duration,transferSize:x.transferSize}));
+      const registeredBodyFaces=[...document.fonts].filter(x=>bodyCandidates.some(f=>f.toLowerCase()===x.family.replace(/^["']|["']$/g,'').toLowerCase())).map(x=>({family:x.family,weight:x.weight,status:x.status}));
       const adobeFaces=[...document.fonts].filter(x=>adobeCandidates.some(f=>f.toLowerCase()===x.family.replace(/^["']|["']$/g,'').toLowerCase()));
       const adobeLoaded=adobeFaces.filter(x=>x.status==='loaded').map(x=>({family:x.family,weight:x.weight}));
       const adobeCheck=adobeCandidates.map(f=>({family:f,available:document.fonts.check('24px "'+f+'"','日本語')}));
-      return {bodyFont:body.fontFamily,bodyCandidates,bodyLoaded,titleFont:title.fontFamily,adobeKit:adobeStyle?.href||null,remote,loadedFonts:[...document.fonts].filter(x=>x.status==='loaded').map(x=>x.family),adobeCandidates,adobeLoaded,adobeCheck,adobeStatus:adobeLoaded.length?'font-face-loaded':'unverified-or-fallback'};
+      return {bodyFont:body.fontFamily,bodyCandidates,bodyLoaded,registeredBodyFaces,kitResponse,titleFont:title.fontFamily,adobeKit:adobeStyle?.href||null,remote,loadedFonts:[...document.fonts].filter(x=>x.status==='loaded').map(x=>x.family),adobeCandidates,adobeLoaded,adobeCheck,adobeStatus:adobeLoaded.length?'font-face-loaded':'unverified-or-fallback'};
     });
     console.log('FONT_DIAGNOSTICS',device,JSON.stringify(result));
     assert(result.bodyFont.length>0,'computed body font missing');
