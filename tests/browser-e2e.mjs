@@ -1,5 +1,6 @@
 import { chromium, devices } from 'playwright';
 import assert from 'node:assert/strict';
+import { mkdir } from 'node:fs/promises';
 
 const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:8765';
 const browser = await chromium.launch({headless:true});
@@ -276,6 +277,23 @@ for (const device of ['desktop','mobile']) {
     assert.equal(await inquiry.getAttribute('target'),'_blank','external inquiry must open separately');
     const rel=(await inquiry.getAttribute('rel')||'').split(/\s+/);
     assert(rel.includes('noopener')&&rel.includes('noreferrer'),'external inquiry must be isolated');
+  });
+  // Save deterministic PC/SP evidence even if an earlier assertion failed.
+  await check(device+' visual audit screenshots',async()=>{
+    await mkdir('browser-e2e-screenshots',{recursive:true});
+    for(const [path,name] of [['/','home'],['/rental.html','rental']]){
+      await page.goto(base+path,{waitUntil:'domcontentloaded'});
+      if(path==='/'){
+        await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+        await page.locator('#open-about').click();
+      }
+      await page.evaluate(async()=>{
+        for(const img of document.querySelectorAll('img[loading="lazy"]'))img.loading='eager';
+        await Promise.all([...document.images].map(img=>img.decode().catch(()=>{})));
+        await document.fonts.ready;
+      });
+      await page.screenshot({path:`browser-e2e-screenshots/${device}-${name}.png`,fullPage:true,animations:'disabled'});
+    }
   });
   await context.close();
 }
