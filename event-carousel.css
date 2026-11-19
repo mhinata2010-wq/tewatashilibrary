@@ -1,0 +1,119 @@
+/* Event carousel beneath the home hero.
+   Placeholder cards deliberately contain no invented Instagram content. */
+.event-carousel-section {
+  background: var(--paper, #f5f4ee);
+  padding: 0 0 clamp(45px, 6vw, 78px);
+  overflow-x: clip;
+}
+.event-carousel-track {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(16px, 2vw, 24px);
+  padding: 0 4px 8px;
+  margin: 0;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+}
+.event-carousel-track::-webkit-scrollbar { display: none; }
+.event-carousel-track.is-dragging { cursor: grabbing; }
+.event-carousel-track:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: -3px;
+}
+.event-carousel-card {
+  display: block;
+  flex: 0 0 clamp(210px, 21vw, 236px);
+  height: clamp(320px, 37vw, 414px);
+  border-radius: 18px;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+.event-carousel-card--pending { background: #ddd; }
+.event-carousel-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.event-carousel-footer {
+  width: min(100% - 32px, 1160px);
+  margin: 25px auto 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 56px;
+}
+.event-carousel-title {
+  position: relative;
+  margin: 0;
+  padding: 0 7px 10px;
+  color: #111;
+  font-size: clamp(22px, 2.6vw, 30px);
+  line-height: 1.4;
+  font-weight: 800;
+  letter-spacing: .01em;
+  text-align: center;
+}
+.event-carousel-title::after {
+  content: "";
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  bottom: 0;
+  height: 3px;
+  background: currentColor;
+  transform: rotate(-.5deg);
+}
+.event-carousel-controls {
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: 8px;
+}
+.event-carousel-arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #888;
+  border-radius: 50%;
+  color: #191919;
+  cursor: pointer;
+}
+.event-carousel-arrow:hover:not(:disabled) { background: #eae8e2; }
+.event-carousel-arrow:disabled { opacity: .3; cursor: default; }
+.event-carousel-arrow:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.event-carousel-help {
+  text-align: center;
+  max-width: 760px;
+  padding: 0 18px;
+  margin: 18px auto 0;
+  color: #595959;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.event-carousel-help a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) {
+  .event-carousel-card {
+    flex-basis: min(65vw, 246px);
+    height: min(102vw, 382px);
+    border-radius: 16px;
+  }
+  .event-carousel-footer { flex-direction: column; gap: 18px; }
+  .event-carousel-controls { position: static; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .event-carousel-track { scroll-behavior: auto; }
+}

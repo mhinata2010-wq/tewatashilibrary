@@ -134,3 +134,23 @@ assert(rental.includes('https://www.instagram.com/kitanarashino.tewatashi.lib/')
 for (const [pageName, pageHtml] of [['index.html', index], ['rental.html', rental]]) {
  assert(!/href=["']https?:\/\/www\.instagram\.com\/(?:p|reel|tv)\/[^"']+["']/.test(pageHtml), pageName+': unverified Instagram content URL');
 }
+
+
+// Homepage event carousel must remain a horizontally scrollable, accessible list.
+assert(index.includes('id="event-carousel-track"'), 'events track missing');
+assert(index.includes('aria-roledescription="カルーセル"'), 'events carousel lacks accessibility description');
+assert(index.includes('id="event-scroll-prev"') && index.includes('id="event-scroll-next"'), 'event carousel arrows missing');
+assert(index.indexOf('id="events"') > index.indexOf('id="home"') && index.indexOf('id="events"') < index.indexOf('id="about-intro"'), 'event cards must follow hero');
+for (const name of ['event-carousel.css','event-carousel.js']) {
+ assert(index.includes(name), 'missing event carousel asset link: ' + name);
+ assert(existsSync(join(root,name)), 'missing event carousel asset file: ' + name);
+}
+const eventCss=readFileSync(join(root,'event-carousel.css'),'utf8');
+const eventJs=readFileSync(join(root,'event-carousel.js'),'utf8');
+assert(eventCss.includes('overflow-x: auto'), 'event track must support native horizontal scrolling');
+assert(eventCss.includes('scroll-snap-type: x mandatory'), 'event track must snap cards');
+assert(eventCss.includes('flex-wrap: nowrap'), 'event cards must not wrap into rows');
+assert(eventJs.includes('pointerdown') && eventJs.includes('pointermove'), 'mouse drag support missing');
+assert(eventJs.includes("event.key === 'ArrowRight'") && eventJs.includes("event.key === 'End'"), 'keyboard scrolling missing');
+assert(eventJs.includes('reducedMotion.matches'), 'reduced motion support missing');
+execFileSync('node',['--check',join(root,'event-carousel.js')]);
