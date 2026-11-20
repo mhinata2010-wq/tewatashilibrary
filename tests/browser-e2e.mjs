@@ -235,6 +235,13 @@ for (const device of ['desktop','mobile']) {
       await page.waitForFunction(()=>document.querySelector('#gallery .library-gallery').scrollLeft>50);
       assert((await gallery.evaluate(el=>el.scrollLeft))>50,'gallery must actually scroll');
       assert(await gallery.getAttribute('tabindex')==='0','gallery must be keyboard focusable');
+      // A focusable gallery must also respond to keyboard navigation, not just touch.
+      await gallery.evaluate(el=>el.scrollTo({left:0,behavior:'instant'}));
+      await gallery.focus();
+      assert(await gallery.evaluate(el=>document.activeElement===el),'gallery must receive keyboard focus');
+      await page.keyboard.press('ArrowRight');
+      await page.waitForFunction(()=>document.querySelector('#gallery .library-gallery').scrollLeft>0,null,{timeout:3000});
+      assert((await gallery.evaluate(el=>el.scrollLeft))>0,'ArrowRight must scroll the gallery');
     });
   }
   await check(device+' no horizontal overflow', async () => {
