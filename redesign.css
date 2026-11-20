@@ -72,3 +72,10 @@ body{background:var(--paper)}
 
 /* Hidden fallback labels must remain invisible while their images load. */
 .image-fallback[hidden]{display:none}
+
+/* Mobile gallery: swipeable real-photo carousel with keyboard access; desktop grid preserved. */
+@media(max-width:600px){
+  #gallery .library-gallery{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,82%);grid-template-columns:none;gap:14px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scroll-padding-inline:4px;padding:4px 4px 16px;-webkit-overflow-scrolling:touch}
+  #gallery .library-gallery figure{scroll-snap-align:start;min-width:0}
+  #gallery .library-gallery:focus-visible{outline:3px solid #2563eb;outline-offset:3px}
+}
