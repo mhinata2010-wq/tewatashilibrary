@@ -134,3 +134,18 @@ assert(rental.includes('https://www.instagram.com/kitanarashino.tewatashi.lib/')
 for (const [pageName, pageHtml] of [['index.html', index], ['rental.html', rental]]) {
  assert(!/href=["']https?:\/\/www\.instagram\.com\/(?:p|reel|tv)\/[^"']+["']/.test(pageHtml), pageName+': unverified Instagram content URL');
 }
+
+
+// Accessibility regression: embedded services need descriptive titles, and external
+// new-tab links must prevent opener access. This checks both published pages.
+for (const page of ['index.html', 'rental.html']) {
+ const html = readFileSync(join(root,page),'utf8');
+ for (const iframe of html.matchAll(/<iframe\b[^>]*>/gi)) {
+  assert.match(iframe[0], /\btitle="[^"]+"/i, page+': iframe missing accessible title');
+ }
+ for (const anchor of html.matchAll(/<a\b[^>]*>/gi)) {
+  if (!/\btarget="_blank"/i.test(anchor[0])) continue;
+  assert.match(anchor[0], /\brel="[^"]*\bnoopener\b[^"]*"/i, page+': new-tab link missing noopener');
+ }
+}
+console.log('PASS: embedded-service titles and safe new-tab links');
