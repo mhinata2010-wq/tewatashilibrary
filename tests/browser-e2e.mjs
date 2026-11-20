@@ -168,8 +168,8 @@ for (const device of ['desktop','mobile']) {
       const adobeStyle=[...document.querySelectorAll('link[rel="stylesheet"]')].find(x=>x.href.includes('use.typekit.net'));
       const remote=performance.getEntriesByType('resource').filter(x=>x.name.includes('use.typekit.net')).map(x=>({name:x.name,status:x.responseStatus||null}));
       const declared=title.fontFamily.split(',').map(x=>x.trim().replace(/^["']|["']$/g,''));
-      const adobeCandidates=declared.filter(x=>/^(ads-akari|fot-tsukuardgothic-std)$/i.test(x));
-      const bodyCandidates=body.fontFamily.split(',').map(x=>x.trim().replace(/^["']|["']$/g,'')).filter(x=>/^(ads-akari|fot-tsukuardgothic-std)$/i.test(x));
+      const adobeCandidates=declared.filter(x=>/^(ads-akari|gotti-variable|fot-tsukuardgothic-std)$/i.test(x));
+      const bodyCandidates=body.fontFamily.split(',').map(x=>x.trim().replace(/^["']|["']$/g,'')).filter(x=>/^(ads-akari|gotti-variable|fot-tsukuardgothic-std)$/i.test(x));
       for(const family of bodyCandidates) await document.fonts.load('16px "'+family+'"','図書館について');
       const bodyLoaded=[...document.fonts].filter(x=>x.status==='loaded'&&bodyCandidates.some(f=>f.toLowerCase()===x.family.replace(/^["']|["']$/g,'').toLowerCase())).map(x=>({family:x.family,weight:x.weight}));
       const kitResponse=performance.getEntriesByType('resource').filter(x=>x.name.includes('use.typekit.net/kqc5rmz')).map(x=>({name:x.name,status:x.responseStatus||null,duration:x.duration,transferSize:x.transferSize}));
