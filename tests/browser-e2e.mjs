@@ -225,6 +225,18 @@ for (const device of ['desktop','mobile']) {
       assert((await img.evaluate(el=>el.naturalWidth))>0,'gallery image failed to decode: '+expected[i]);
     }
   });
+  if(device==='mobile'){
+    await check('mobile gallery swipes horizontally without page overflow',async()=>{
+      const gallery=page.locator('#gallery .library-gallery');
+      await gallery.scrollIntoViewIfNeeded();
+      const before=await gallery.evaluate(el=>({left:el.scrollLeft,max:el.scrollWidth-el.clientWidth}));
+      assert(before.max>100,'mobile gallery must have horizontal scroll range');
+      await gallery.evaluate(el=>el.scrollTo({left:el.scrollWidth,behavior:'instant'}));
+      await page.waitForFunction(()=>document.querySelector('#gallery .library-gallery').scrollLeft>50);
+      assert((await gallery.evaluate(el=>el.scrollLeft))>50,'gallery must actually scroll');
+      assert(await gallery.getAttribute('tabindex')==='0','gallery must be keyboard focusable');
+    });
+  }
   await check(device+' no horizontal overflow', async () => {
     const dims=await page.evaluate(()=>({doc:document.documentElement.scrollWidth,viewport:window.innerWidth}));
     assert(dims.doc<=dims.viewport+2,JSON.stringify(dims));
