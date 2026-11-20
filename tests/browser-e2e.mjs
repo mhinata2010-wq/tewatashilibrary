@@ -293,6 +293,15 @@ for (const device of ['desktop','mobile']) {
         await document.fonts.ready;
       });
       await page.screenshot({path:`browser-e2e-screenshots/${device}-${name}.png`,fullPage:true,animations:'disabled'});
+      if(path==='/'){
+        // Capture individual Figma-comparable sections as well as the full page.
+        // Screenshots are evidence, not an automated pixel-diff or design approval.
+        for(const [selector,section] of [['#home','hero'],['#video','video'],['#promises','promises'],['#gallery','gallery']]){
+          const target=page.locator(selector);
+          await target.scrollIntoViewIfNeeded();
+          await target.screenshot({path:`browser-e2e-screenshots/${device}-${section}.png`,animations:'disabled'});
+        }
+      }
     }
   });
   await context.close();
