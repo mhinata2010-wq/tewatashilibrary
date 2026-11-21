@@ -29,6 +29,28 @@ jobs:
         run: |
           set -o pipefail
           node tests/browser-e2e.mjs 2>&1 | tee browser-e2e-results.log
+      # The normal E2E accepts an accessible photo fallback. Release readiness must not.
+      - name: Official MP4 playback readiness (expected blocker until approved MP4 exists)
+        id: playback_readiness
+        continue-on-error: true
+        env:
+          REQUIRE_REAL_MEDIA: '1'
+          REQUIRE_ADOBE_FONT: '1'
+        run: |
+          set -o pipefail
+          node tests/browser-e2e.mjs 2>&1 | tee browser-e2e-release-readiness.log
+      - name: Publish playback readiness to workflow summary
+        if: always()
+        env:
+          PLAYBACK_OUTCOME: ${{ steps.playback_readiness.outcome }}
+        run: |
+          if [ "$PLAYBACK_OUTCOME" = "success" ]; then
+            echo "### Official MP4 playback readiness: PASS" >> "$GITHUB_STEP_SUMMARY"
+            echo "Strict browser checks passed; publication rights and source authenticity still require separate approval." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Official MP4 playback readiness: BLOCKED ($PLAYBACK_OUTCOME)" >> "$GITHUB_STEP_SUMMARY"
+            echo "Strict browser playback or font verification failed. Normal fallback E2E is not release approval." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - name: Preserve browser diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -36,6 +58,7 @@ jobs:
           name: browser-e2e-diagnostics
           path: |
             browser-e2e-results.log
+            browser-e2e-release-readiness.log
             browser-e2e-screenshots/*.png
             /tmp/tewatashi-server.log
           if-no-files-found: warn
