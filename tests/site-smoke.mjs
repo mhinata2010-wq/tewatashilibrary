@@ -159,3 +159,14 @@ for (const page of ['index.html', 'rental.html']) {
  }
 }
 console.log('PASS: all image elements declare alternative text');
+
+// CSS references to local official images must not silently break during Figma revisions.
+// Remote URLs and data URIs are deliberately excluded.
+for (const cssFile of ['redesign.css']) {
+ const css = readFileSync(join(root,cssFile),'utf8');
+ for (const match of css.matchAll(/url\(\s*['"]?(\.\/)?(assets\/images\/[^)'"?#\s]+)['"]?\s*\)/gi)) {
+  const asset = match[2];
+  assert(existsSync(join(root,asset)), cssFile+': missing local CSS image '+asset);
+ }
+}
+console.log('PASS: CSS local image references resolve');
