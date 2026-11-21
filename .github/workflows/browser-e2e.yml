@@ -23,9 +23,9 @@ jobs:
             sleep 1
           done
           exit 1
-      - name: Browser tests (Adobe Fonts required)
-        env:
-          REQUIRE_ADOBE_FONT: '1'
+      # Functional E2E must remain useful when the external Adobe kit is unavailable.
+      # Font loading and real MP4 playback are checked by the separate release gate below.
+      - name: Browser tests (functional fallback permitted)
         run: |
           set -o pipefail
           node tests/browser-e2e.mjs 2>&1 | tee browser-e2e-results.log
