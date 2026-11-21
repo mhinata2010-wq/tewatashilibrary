@@ -30,6 +30,7 @@ for(const page of ['index.html','rental.html']){
    continue;
   }
   assert(existsSync(join(root,asset)),`${page}: missing image ${asset}`);
+  assert(statSync(join(root,asset)).isFile() && statSync(join(root,asset)).size>0,`${page}: empty or invalid image ${asset}`);
  }
  assert(!html.includes('figma.com/api/mcp/asset/'),`${page}: temporary Figma asset URL`);
 }
@@ -167,6 +168,7 @@ for (const cssFile of ['redesign.css']) {
  for (const match of css.matchAll(/url\(\s*['"]?(\.\/)?(assets\/images\/[^)'"?#\s]+)['"]?\s*\)/gi)) {
   const asset = match[2];
   assert(existsSync(join(root,asset)), cssFile+': missing local CSS image '+asset);
+  assert(statSync(join(root,asset)).isFile() && statSync(join(root,asset)).size>0, cssFile+': empty or invalid local CSS image '+asset);
  }
 }
 console.log('PASS: CSS local image references resolve');
