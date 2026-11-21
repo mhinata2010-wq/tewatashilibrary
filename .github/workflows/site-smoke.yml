@@ -1,0 +1,22 @@
+name: Site smoke checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Smoke test
+        run: node tests/site-smoke.mjs
+      # Track release readiness separately from fallback behavior. Missing approved media
+      # must remain visible without blocking review of unrelated changes.
+      - name: Official media readiness (expected blocker until MP4 is registered)
+        continue-on-error: true
+        env:
+          REQUIRE_REAL_MEDIA: '1'
+        run: node tests/site-smoke.mjs
