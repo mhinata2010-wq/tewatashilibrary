@@ -327,6 +327,29 @@ for (const device of ['desktop','mobile']) {
   });
   await context.close();
 }
+// Figma frame 33:144 uses a 1920x1080 desktop canvas. Capture a matching
+// viewport separately from the 1440px functional regression run.
+await check('Figma 1920x1080 desktop visual evidence', async () => {
+  const context = await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1});
+  try {
+    const page = await context.newPage();
+    await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+    await page.locator('#splash').waitFor({state:'detached',timeout:7000});
+    await page.evaluate(async()=>{
+      for(const img of document.querySelectorAll('img[loading="lazy"]')) img.loading='eager';
+      await Promise.all([...document.images].map(img=>img.decode().catch(()=>{})));
+      await document.fonts.ready;
+    });
+    const dimensions = await page.evaluate(()=>({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth}));
+    assert.equal(dimensions.width,1920);
+    assert.equal(dimensions.height,1080);
+    assert(dimensions.scrollWidth<=1922,'1920px desktop horizontal overflow: '+JSON.stringify(dimensions));
+    await mkdir('browser-e2e-screenshots',{recursive:true});
+    await page.screenshot({path:'browser-e2e-screenshots/figma-1920-home.png',animations:'disabled'});
+    await page.screenshot({path:'browser-e2e-screenshots/figma-1920-home-full.png',fullPage:true,animations:'disabled'});
+    console.log('FIGMA_VISUAL_EVIDENCE 33:144 1920x1080 screenshots captured; manual visual comparison still required');
+  } finally { await context.close(); }
+});
 await browser.close();
 if (failures.length) { console.error(JSON.stringify(failures,null,2));process.exit(1); }
 console.log('All browser E2E checks passed');
