@@ -13,3 +13,10 @@ jobs:
           node-version: '22'
       - name: Smoke test
         run: node tests/site-smoke.mjs
+      # Track release readiness separately from fallback behavior. Missing approved media
+      # must remain visible without blocking review of unrelated changes.
+      - name: Official media readiness (expected blocker until MP4 is registered)
+        continue-on-error: true
+        env:
+          REQUIRE_REAL_MEDIA: '1'
+        run: node tests/site-smoke.mjs
