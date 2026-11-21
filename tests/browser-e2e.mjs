@@ -99,6 +99,8 @@ for (const device of ['desktop','mobile']) {
       return (v?.readyState>=1)||(f && !f.hidden);
     },null,{timeout:11000});
     if(await fallback.isVisible()){
+      // Strict release verification must reject a photo fallback as proof of MP4 playback.
+      assert(process.env.REQUIRE_REAL_MEDIA!=='1', 'RELEASE_BLOCKER: official MP4 did not play; photo fallback is not release-ready');
       assert(await fallback.locator('img').evaluate(el=>el.naturalWidth)>0,'fallback image must load');
       assert(await fallback.getByRole('link',{name:'写真を見る'}).isVisible(),'photo CTA visible');
       assert(!(await video.isVisible()),'failed media player must be hidden');
