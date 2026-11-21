@@ -149,3 +149,13 @@ for (const page of ['index.html', 'rental.html']) {
  }
 }
 console.log('PASS: embedded-service titles and safe new-tab links');
+
+// Image accessibility regression: meaningful photos must have an alt attribute.
+// An empty alt is allowed for decorative images, but missing alt is not.
+for (const page of ['index.html', 'rental.html']) {
+ const html = readFileSync(join(root,page),'utf8');
+ for (const image of html.matchAll(/<img\\b[^>]*>/gi)) {
+  assert.match(image[0], /\\balt=(?:"[^"]*"|'[^']*')/i, page+': image missing alt attribute');
+ }
+}
+console.log('PASS: all image elements declare alternative text');
