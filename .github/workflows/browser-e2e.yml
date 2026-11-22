@@ -1,6 +1,9 @@
 name: Browser E2E
 on:
   pull_request:
+  push:
+    branches:
+      - feature/tewatashi-integrated-20261113
   workflow_dispatch:
 jobs:
   browser-e2e:
