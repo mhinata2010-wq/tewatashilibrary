@@ -22,6 +22,10 @@ jobs:
           echo "- Ref: $GITHUB_REF" >> "$GITHUB_STEP_SUMMARY"
           echo "- Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
           echo "Note: pull_request runs may test a synthetic merge commit rather than the PR head SHA." >> "$GITHUB_STEP_SUMMARY"
+          printf "checkout_sha=%s\nevent=%s\nref=%s\nrun_url=%s/%s/actions/runs/%s\npr_head_sha=%s\n" \
+            "$(git rev-parse HEAD)" "$GITHUB_EVENT_NAME" "$GITHUB_REF" \
+            "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" \
+            "${{ github.event.pull_request.head.sha }}" > browser-e2e-provenance.txt
       - name: Install browser
         run: |
           npm install --no-save playwright@1.58.2
@@ -68,6 +72,7 @@ jobs:
         with:
           name: browser-e2e-diagnostics
           path: |
+            browser-e2e-provenance.txt
             browser-e2e-results.log
             browser-e2e-release-readiness.log
             browser-e2e-screenshots/*.png
