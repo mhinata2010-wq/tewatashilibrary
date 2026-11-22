@@ -347,6 +347,16 @@ await check('Figma 1920x1080 desktop visual evidence', async () => {
     await mkdir('browser-e2e-screenshots',{recursive:true});
     await page.screenshot({path:'browser-e2e-screenshots/figma-1920-home.png',animations:'disabled'});
     await page.screenshot({path:'browser-e2e-screenshots/figma-1920-home-full.png',fullPage:true,animations:'disabled'});
+    // Figma Page 1 contains separate 600px composition frames for the hero,
+    // introduction video and promises. Preserve section-level evidence at
+    // the 1920px reference viewport, not just full-page composites.
+    for (const [selector, name] of [['#home','hero'],['#video','video'],['#promises','promises']]) {
+      const section=page.locator(selector);
+      await section.scrollIntoViewIfNeeded();
+      assert(await section.isVisible(),'1920px section missing: '+selector);
+      await section.screenshot({path:'browser-e2e-screenshots/figma-1920-'+name+'.png',animations:'disabled'});
+    }
+
     // Capture the expanded information state and rental page at the same
     // Figma desktop viewport, rather than comparing only the collapsed hero.
     await page.locator('#open-about').click();
