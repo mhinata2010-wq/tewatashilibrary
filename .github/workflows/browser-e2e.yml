@@ -14,6 +14,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Record exact checkout SHA and trigger
+        run: |
+          echo "### Browser E2E provenance" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Checked-out commit: $(git rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- GitHub event: $GITHUB_EVENT_NAME" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Ref: $GITHUB_REF" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+          echo "Note: pull_request runs may test a synthetic merge commit rather than the PR head SHA." >> "$GITHUB_STEP_SUMMARY"
       - name: Install browser
         run: |
           npm install --no-save playwright@1.58.2
