@@ -1,0 +1,35 @@
+name: Site smoke checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Smoke test
+        run: node tests/site-smoke.mjs
+      # Track release readiness separately from fallback behavior. Missing approved media
+      # must remain visible without blocking review of unrelated changes.
+      - name: Official media readiness (expected blocker until MP4 is registered)
+        id: media_readiness
+        continue-on-error: true
+        env:
+          REQUIRE_REAL_MEDIA: '1'
+        run: node tests/site-smoke.mjs
+      - name: Publish media readiness to workflow summary
+        if: always()
+        env:
+          MEDIA_OUTCOME: ${{ steps.media_readiness.outcome }}
+        run: |
+          if [ "$MEDIA_OUTCOME" = "success" ]; then
+            echo "### Official media readiness: PASS" >> "$GITHUB_STEP_SUMMARY"
+            echo "MP4 structural checks passed. Browser playback and publication permission remain separate checks." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Official media readiness: BLOCKED ($MEDIA_OUTCOME)" >> "$GITHUB_STEP_SUMMARY"
+            echo "Official MP4 is missing or invalid. Review CI remains non-blocking, but this is not release approval." >> "$GITHUB_STEP_SUMMARY"
+          fi

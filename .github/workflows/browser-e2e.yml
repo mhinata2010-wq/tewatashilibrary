@@ -1,0 +1,66 @@
+name: Browser E2E
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  browser-e2e:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Serve site
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/tewatashi-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl --fail --silent http://127.0.0.1:8765/ >/dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+      # Functional E2E must remain useful when the external Adobe kit is unavailable.
+      # Font loading and real MP4 playback are checked by the separate release gate below.
+      - name: Browser tests (functional fallback permitted)
+        run: |
+          set -o pipefail
+          node tests/browser-e2e.mjs 2>&1 | tee browser-e2e-results.log
+      # The normal E2E accepts an accessible photo fallback. Release readiness must not.
+      - name: Official MP4 playback readiness (expected blocker until approved MP4 exists)
+        id: playback_readiness
+        continue-on-error: true
+        env:
+          REQUIRE_REAL_MEDIA: '1'
+          REQUIRE_ADOBE_FONT: '1'
+        run: |
+          set -o pipefail
+          node tests/browser-e2e.mjs 2>&1 | tee browser-e2e-release-readiness.log
+      - name: Publish playback readiness to workflow summary
+        if: always()
+        env:
+          PLAYBACK_OUTCOME: ${{ steps.playback_readiness.outcome }}
+        run: |
+          if [ "$PLAYBACK_OUTCOME" = "success" ]; then
+            echo "### Official MP4 playback readiness: PASS" >> "$GITHUB_STEP_SUMMARY"
+            echo "Strict browser checks passed; publication rights and source authenticity still require separate approval." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "### Official MP4 playback readiness: BLOCKED ($PLAYBACK_OUTCOME)" >> "$GITHUB_STEP_SUMMARY"
+            echo "Strict browser playback or font verification failed. Normal fallback E2E is not release approval." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Preserve browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-e2e-diagnostics
+          path: |
+            browser-e2e-results.log
+            browser-e2e-release-readiness.log
+            browser-e2e-screenshots/*.png
+            /tmp/tewatashi-server.log
+          if-no-files-found: warn
+          # Keep Figma comparison evidence available across review cycles.
+          retention-days: 30
