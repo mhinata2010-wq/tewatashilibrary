@@ -62,4 +62,5 @@ jobs:
             browser-e2e-screenshots/*.png
             /tmp/tewatashi-server.log
           if-no-files-found: warn
-          retention-days: 14
+          # Keep Figma comparison evidence available across review cycles.
+          retention-days: 30
