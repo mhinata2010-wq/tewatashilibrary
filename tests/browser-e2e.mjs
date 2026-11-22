@@ -347,6 +347,20 @@ await check('Figma 1920x1080 desktop visual evidence', async () => {
     await mkdir('browser-e2e-screenshots',{recursive:true});
     await page.screenshot({path:'browser-e2e-screenshots/figma-1920-home.png',animations:'disabled'});
     await page.screenshot({path:'browser-e2e-screenshots/figma-1920-home-full.png',fullPage:true,animations:'disabled'});
+    // Capture the expanded information state and rental page at the same
+    // Figma desktop viewport, rather than comparing only the collapsed hero.
+    await page.locator('#open-about').click();
+    assert(await page.locator('#about-content').isVisible(),'1920px about panel must expand');
+    await page.screenshot({path:'browser-e2e-screenshots/figma-1920-about-full.png',fullPage:true,animations:'disabled'});
+    await page.goto(base+'/rental.html',{waitUntil:'domcontentloaded'});
+    await page.evaluate(async()=>{
+      for(const img of document.querySelectorAll('img[loading="lazy"]')) img.loading='eager';
+      await Promise.all([...document.images].map(img=>img.decode().catch(()=>{})));
+      await document.fonts.ready;
+    });
+    const rentalWidth=await page.evaluate(()=>document.documentElement.scrollWidth);
+    assert(rentalWidth<=1922,'1920px rental horizontal overflow: '+rentalWidth);
+    await page.screenshot({path:'browser-e2e-screenshots/figma-1920-rental-full.png',fullPage:true,animations:'disabled'});
     console.log('FIGMA_VISUAL_EVIDENCE 33:144 1920x1080 screenshots captured; manual visual comparison still required');
   } finally { await context.close(); }
 });
