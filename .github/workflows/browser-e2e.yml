@@ -126,6 +126,7 @@ jobs:
           else
             echo "### Official MP4 playback readiness: BLOCKED ($PLAYBACK_OUTCOME)" >> "$GITHUB_STEP_SUMMARY"
             echo "release_readiness=blocked" > browser-e2e-release-status.txt
+            echo "::warning title=Release readiness blocked::Strict MP4 playback or Adobe Fonts verification failed. See browser-e2e-release-status.txt in the diagnostics artifact."
             echo "Strict browser playback or font verification failed. Normal fallback E2E is not release approval." >> "$GITHUB_STEP_SUMMARY"
           fi
       - name: Preserve browser diagnostics
