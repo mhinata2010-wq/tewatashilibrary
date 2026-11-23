@@ -81,9 +81,14 @@ jobs:
                   if not (0 < width <= 30000 and 0 < height <= 30000):
                       raise ValueError(f"invalid dimensions {width}x{height}")
                   # Prevent mislabeled viewport captures from passing as Figma evidence.
-                  expected_width = 1920 if name.startswith("figma-1920-") else (390 if name.startswith("mobile-") else 1440)
-                  if width != expected_width:
-                      raise ValueError(f"wrong viewport width {width}px; expected {expected_width}px")
+                  # Playwright element screenshots are cropped to the element, not the viewport.
+                  # iPhone 13 uses deviceScaleFactor=3, so 390 CSS px becomes 1170 PNG px.
+                  viewport_pixels = 1920 if name.startswith("figma-1920-") else (1170 if name.startswith("mobile-") else 1440)
+                  full_viewport = name in ("desktop-home", "desktop-rental", "mobile-home", "mobile-rental", "figma-1920-home", "figma-1920-home-full", "figma-1920-about-full", "figma-1920-rental-full")
+                  if full_viewport and width != viewport_pixels:
+                      raise ValueError(f"wrong full-page/viewport width {width}px; expected {viewport_pixels}px")
+                  if not full_viewport and not (0 < width <= viewport_pixels):
+                      raise ValueError(f"section screenshot width {width}px exceeds viewport {viewport_pixels}px")
                   print(f"VALID_PNG {name} {width}x{height}")
               except (OSError, ValueError, struct.error) as error:
                   errors.append(f"{name}: {error}")
