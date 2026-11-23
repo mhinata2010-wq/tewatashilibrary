@@ -62,6 +62,32 @@ jobs:
               missing=1
             fi
           done
+          # A non-empty file is not necessarily a valid screenshot. Validate PNG headers and dimensions.
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct
+          import sys
+
+          expected = """desktop-home desktop-rental mobile-home mobile-rental desktop-hero desktop-video desktop-promises desktop-gallery mobile-hero mobile-video mobile-promises mobile-gallery figma-1920-home figma-1920-home-full figma-1920-hero figma-1920-video figma-1920-promises figma-1920-about-full figma-1920-rental-full""".split()
+          errors = []
+          for name in expected:
+              path = Path("browser-e2e-screenshots") / (name + ".png")
+              try:
+                  with path.open("rb") as file:
+                      header = file.read(24)
+                  if len(header) != 24 or header[:8] != b"\\x89PNG\\r\\n\\x1a\\n" or header[12:16] != b"IHDR":
+                      raise ValueError("invalid PNG signature or IHDR")
+                  width, height = struct.unpack(">II", header[16:24])
+                  if not (0 < width <= 30000 and 0 < height <= 30000):
+                      raise ValueError(f"invalid dimensions {width}x{height}")
+                  print(f"VALID_PNG {name} {width}x{height}")
+              except (OSError, ValueError, struct.error) as error:
+                  errors.append(f"{name}: {error}")
+          for error in errors:
+              print(f"INVALID_PNG {error}", file=sys.stderr)
+          if errors:
+              sys.exit(1)
+          PY
           echo "### Visual evidence integrity" >> "$GITHUB_STEP_SUMMARY"
           echo "Manifest: browser-e2e-screenshot-manifest.txt" >> "$GITHUB_STEP_SUMMARY"
           if [ "$missing" -ne 0 ]; then
