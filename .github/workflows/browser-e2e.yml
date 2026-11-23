@@ -80,6 +80,10 @@ jobs:
                   width, height = struct.unpack(">II", header[16:24])
                   if not (0 < width <= 30000 and 0 < height <= 30000):
                       raise ValueError(f"invalid dimensions {width}x{height}")
+                  # Prevent mislabeled viewport captures from passing as Figma evidence.
+                  expected_width = 1920 if name.startswith("figma-1920-") else (390 if name.startswith("mobile-") else 1440)
+                  if width != expected_width:
+                      raise ValueError(f"wrong viewport width {width}px; expected {expected_width}px")
                   print(f"VALID_PNG {name} {width}x{height}")
               except (OSError, ValueError, struct.error) as error:
                   errors.append(f"{name}: {error}")
