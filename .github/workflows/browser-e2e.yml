@@ -53,7 +53,7 @@ jobs:
           mkdir -p browser-e2e-screenshots
           : > browser-e2e-screenshot-manifest.txt
           missing=0
-          for name in desktop-home desktop-rental mobile-home mobile-rental desktop-hero desktop-video desktop-promises desktop-gallery mobile-hero mobile-video mobile-promises mobile-gallery; do
+          for name in desktop-home desktop-rental mobile-home mobile-rental desktop-hero desktop-video desktop-promises desktop-gallery mobile-hero mobile-video mobile-promises mobile-gallery figma-1920-home figma-1920-home-full figma-1920-hero figma-1920-video figma-1920-promises figma-1920-about-full figma-1920-rental-full; do
             file="browser-e2e-screenshots/${name}.png"
             if [ -s "$file" ]; then
               sha256sum "$file" >> browser-e2e-screenshot-manifest.txt
@@ -68,7 +68,7 @@ jobs:
             echo "Screenshot evidence incomplete; this does not prove Figma parity." >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
-          echo "12 required screenshot files exist and have SHA-256 fingerprints. Figma pixel comparison remains separate." >> "$GITHUB_STEP_SUMMARY"
+          echo "19 required screenshot files exist and have SHA-256 fingerprints. Figma pixel comparison remains separate." >> "$GITHUB_STEP_SUMMARY"
       # The normal E2E accepts an accessible photo fallback. Release readiness must not.
       - name: Official MP4 playback readiness (expected blocker until approved MP4 exists)
         id: playback_readiness
